@@ -3,6 +3,9 @@
 [ref:compile]: chapters/chapter_2/README.md
 [ref:run]: chapters/chapter_2/README.md
 [ref:docs]: http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-latest-guides/en/syslog-ng-ose-guide-admin/html-single/index.html
+[ref:homebrew]: https://brew.sh
+[gh:ose-official]: https://www.github.com/balabit/syslog-ng
+[gh:ose-gregory094]: https://www.github.com/balabit/syslog-ng
 
 ## Introduction
 
@@ -10,14 +13,14 @@ Syslog-ng has been resurrected on OSX platform by our developer team.
 We hope our product can be useful for Mac users who want security on their
 system via reliable logging. 
 
-At present we support syslog-ng 3.6 on our official repository on GitHub and 3.7 also planned to be available
-on OSX platform. A “non-official” support is available for 3.5 at gregory094/syslog-ng on GitHub but we 
-do not plan to backport the support officially.
+At present we support syslog-ng 3.6 on our [official repository][gh:ose-official] on GitHub and 3.7 also planned to be available
+on OSX platform. A “non-official” support is available for 3.5 at [gregory094/syslog-ng][gh:ose-gregory094] 
+on GitHub but we do not plan to backport the support officially.
 
 ## Installation process
 Like every project syslog-ng also uses different libraries and build-systems that must be installed
 for compiling and running properly. These dependencies can be satisfied compiling every-each libs and tools
-with our own hands but I would prefer to do it on the easy way. Homebrew is a package manager for OSX
+with our own hands but I would prefer to do it on the easy way. [Homebrew][ref:homebrew] is a package manager for OSX
 that has great community and support. We can also use it to install the dependencies we needed.
 
 ### Dependencies
@@ -34,6 +37,7 @@ that has great community and support. We can also use it to install the dependen
     * bison
 
 ```shell
+ruby -e “$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)”
 brew update
 brew install glib openssl libtool automake pkgconfig eventlog pcre bison
 ```
