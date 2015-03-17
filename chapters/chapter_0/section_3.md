@@ -3,9 +3,9 @@
 [ref:compile]: chapters/chapter_2/README.md
 [ref:run]: chapters/chapter_2/README.md
 [ref:docs]: http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-latest-guides/en/syslog-ng-ose-guide-admin/html-single/index.html
-[ref:homebrew]: https://brew.sh
-[gh:ose-official]: https://www.github.com/balabit/syslog-ng
-[gh:ose-gregory094]: https://www.github.com/balabit/syslog-ng
+[ref:homebrew]: http://brew.sh
+[gh:ose-official]: http://www.github.com/balabit/syslog-ng
+[gh:ose-gregory094]: http://www.github.com/gregory094/syslog-ng
 
 ## Introduction
 
