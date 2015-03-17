@@ -1,0 +1,32 @@
+# Getting started to...
+
+* [install syslog-ng on different platforms](chapters/chapter_0/README.md)
+    * [Ubuntu](chapters/chapter_0/section_1.md)
+    * [openSUSE](/chapter_0/section_2.md)
+    * [MacOS X](/chapter_0/section_3.md)
+* [get familiar with the code](chapters/chapter_1/README.md)
+    * [from git repository](chapters/chapter_1/section_1.md)
+    * [from tar.gz](chapters/chapter_1/section_2.md)
+    * [project structure](chapters/chapter_1/section_3.md)
+    * [git structure](chapters/chapter_1/section_4.md)
+* [compile first](chapters/chapter_2/README.md)
+    * [fetching dependecies](chapters/chapter_2/section_1.md)
+    * [./autogen.sh](chapters/chapter_2/section_2.md)
+    * [./configure](chapters/chapter_2/section_3.md)
+    * [make](chapters/chapter_2/section_4.md)
+    * [make distcheck](chapters/chapter_2/section_5.md)
+    * [make func-test](chapters/chapter_2/section_6.md)
+    * [make clean](chapters/chapter_2/section_6.md)
+* [run first](chapters/chapter_3/README.md)
+    * [write your first config](chapters/chapter_3/section_1.md)
+    * [syslog-ng](chapters/chapter_3/section_2.md)
+* [contribute](chapters/chapter_4/README.md)
+    * [tools](chapters/chapter_4/section_1.md)
+    * [issues](chapters/chapter_4/section_2.md)
+    * [commits](chapters/chapter_4/section_4.md)
+    * [features](chapters/chapter_4/section_5.md)
+    * [bugs](chapters/chapter_4/section_6.md)
+    * [process](chapters/chapter_4/section_7.md)
+
+
+
