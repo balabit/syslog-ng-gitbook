@@ -1,8 +1,6 @@
 {
-  "gitbook": ">=2.0.0",
   "title": "Syslog-ng: Getting started...",
   "language": "en",
-  "direction": "rtl",
   "structure": {
   },
   "variables": {
