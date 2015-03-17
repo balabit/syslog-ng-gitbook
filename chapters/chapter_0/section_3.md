@@ -58,7 +58,7 @@ In the syslog-ng folder declare the command below:
 ./configure && make && make install
 ```
 
-*Note:* for options and more read [compile first](ref:compile) guide.
+*Note:* for options and more read [compile first][ref:compile] guide.
 
 ### Testing
 
@@ -69,7 +69,7 @@ make dist-check VERBOSE=1
 make func-test VERBOSE=1
 ```
 
-*Note:* for more read [compile first](ref:compile) guide.
+*Note:* for more read [compile first][ref:compile] guide.
 
 ### Run
 
@@ -77,7 +77,8 @@ make func-test VERBOSE=1
 ./syslog-ng
 ```
 
-*Note:* for more read [run first](ref:run) guide.
-*Note:* for more read syslog-ng [documentation](ref:docs)
+*Note:* for more read [run first][ref:run] guide.
+
+*Note:* for more read syslog-ng [documentation][ref:docs]
 
 
