@@ -2,8 +2,8 @@
 
 * [install syslog-ng on different platforms](chapters/chapter_0/README.md)
     * [Ubuntu](chapters/chapter_0/section_1.md)
-    * [openSUSE](/chapter_0/section_2.md)
-    * [MacOS X](/chapter_0/section_3.md)
+    * [openSUSE](chapters/chapter_0/section_2.md)
+    * [MacOS X](chapters/chapter_0/section_3.md)
 * [get familiar with the code](chapters/chapter_1/README.md)
     * [from git repository](chapters/chapter_1/section_1.md)
     * [from tar.gz](chapters/chapter_1/section_2.md)
