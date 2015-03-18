@@ -22,6 +22,7 @@
     * [features](chapters/chapter_4/section_5.md)
     * [bugs](chapters/chapter_4/section_6.md)
     * [process](chapters/chapter_4/section_7.md)
+    * [licensing](chapters/chapter_4/section_8.md)
 
 
 
