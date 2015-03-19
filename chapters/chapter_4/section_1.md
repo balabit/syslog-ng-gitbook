@@ -34,20 +34,20 @@ syslog-ng so we decided to create this place for ideas. We would like to give yo
 of proposals that is only an offer and help for you to follow. Using this guide you can create a proper 
 description of your idea that is easy to catch.
 
-1. *Short description:*
+1. **Short description:**
 Description of your feature in 3-5 sentences. Try to focus on functionality, high-level use-case.
 
-2. *Use-case:*
+2. **Use-case:**
 Description of the reasons why you think it is a good idea to implement this feature into syslog-ng.
 
-3. *Done definition:*
+3. **Done definition:**
 Short description when you think this feature is implemented. It is advised that you associate to
 use-cases mentioned above.
 
-4. *Realization:*
+4. **Realization:**
 Description of the process of implementation you think that is advised to follow. 
 
-5. *Questions:*
+5. **Questions:**
 List of questions, you think, should be discussed before implementation.
 
 #### Backlog
