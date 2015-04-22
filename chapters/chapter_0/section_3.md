@@ -1,4 +1,4 @@
-# MacOS X platform
+# MacOS X
 
 [ref:compile]: chapters/chapter_2/README.md
 [ref:run]: chapters/chapter_2/README.md
