@@ -32,6 +32,7 @@ that has great community and support. We can also use it to install the dependen
     * libtool
     * automake
     * pkgconfig
+    * flex
     * eventlog
     * pcre
     * bison
@@ -39,7 +40,7 @@ that has great community and support. We can also use it to install the dependen
 ```shell
 ruby -e “$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)”
 brew update
-brew install glib openssl libtool automake pkgconfig eventlog pcre bison
+brew install glib openssl libtool automake pkgconfig eventlog pcre bison flex
 ```
 
 *Note:* bison is needed to be installed using homebrew for the options provided by Apple Developer Tools are
