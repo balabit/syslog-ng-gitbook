@@ -1,4 +1,4 @@
-import argparse
+#!/usr/bin/env python
 
 
 def validate_structural_line(substring):
