@@ -4,7 +4,7 @@
     * [Ubuntu](chapters/chapter_0/section_1.md)
     * [openSUSE](chapters/chapter_0/section_2.md)
     * [MacOS X](chapters/chapter_0/section_3.md)
-* [get familiar with the code](chapters/chapter_1/README.md)
+* [get familiar with the structure](chapters/chapter_1/README.md)
     * [project structure](chapters/chapter_1/section_1.md)
     * [git structure](chapters/chapter_1/section_2.md)
 * [compile first](chapters/chapter_2/README.md)
