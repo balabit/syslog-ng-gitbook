@@ -18,3 +18,26 @@ feedback - but pretty much any open issue can be a good start!
 We use [waffle.io][ar:waffle] as our story board, to prioritize issues
 and guide the development. Use this interface for browsing existing
 issues and pull requests.
+
+If you find a bug or request a feature you should create an issue for it.
+There is no ultimate form for an issue but some basic ideas should be taken
+to consideration. 
+
+#### Common bulletpoints
+* short, informative sentences
+* references to docs, other issues
+* picture (1 picture tells more than a 1000 sentences)
+
+#### Bulletpoints of an issue about...
+
+##### Bug
+* short description of the phenomenon
+* configuration and architecture example to reproduce it
+* longer description of the bug (references to the documentation why you think it’s a bug)
+* possible explanations, ideas about the root cause
+
+##### Feature
+* short description of the request
+* use-cases (why do you think it worths implementing)
+* some ideas if you have any about how to implement the feature,
+what should be taken to consideration
