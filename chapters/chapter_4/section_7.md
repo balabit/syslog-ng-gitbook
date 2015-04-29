@@ -1,5 +1,7 @@
 # process
 
+[ar:issue-tracker]: https://github.com/balabit/syslog-ng/issues 
+
 Of course, we also accept patches. If you want to submit a patch, the
 guidelines are very, very simple:
 
