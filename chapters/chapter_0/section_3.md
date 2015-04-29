@@ -6,6 +6,7 @@
 [ref:homebrew]: http://brew.sh
 [gh:ose-official]: http://www.github.com/balabit/syslog-ng
 [gh:ose-gregory094]: http://www.github.com/gregory094/syslog-ng
+[gh:ose-gregory094-osx]: https://github.com/gregory094/syslog-ng/tree/3.6/f/macosx
 
 ## Introduction
 
@@ -13,8 +14,8 @@ Syslog-ng has been resurrected on OSX platform by our developer team.
 We hope our product can be useful for Mac users who want security on their
 system via reliable logging. 
 
-At present we support syslog-ng 3.6 on our [official repository][gh:ose-official] on GitHub and 3.7 also planned to be available
-on OSX platform. A “non-official” support is available for 3.5 at [gregory094/syslog-ng][gh:ose-gregory094] 
+At present we are not supporting OSX syslog-ng on our [official repository][gh:ose-official] on GitHub. 
+A “non-official” support is available for [3.6][gh:ose-gregory094-osx] at [gregory094/syslog-ng][gh:ose-gregory094] 
 on GitHub but we do not plan to backport the support officially.
 
 ## Installation process
