@@ -35,7 +35,7 @@ We are planning to use CI with the repository to avoid typos and compile errors.
 You can find a `Vagrantfile` in the repository that you can use to install a development environment to test
 your modifications. 
 
-* Install [VirtualBox](https://www.vagrantup.com/downloads.html) for we use it as a provider of the devenv.
+* Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) for we use it as a provider of the devenv.
 Naturally you can use other providers like Docker, VMWare. [Read more](http://docs.vagrantup.com/v2/providers/)
 * [Install Vagrant](https://www.vagrantup.com/downloads.html)
 * Run the shell commands below in the root directory of the project
