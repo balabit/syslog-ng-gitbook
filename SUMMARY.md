@@ -25,3 +25,6 @@
     * [process](chapters/chapter_4/section_7.md)
     * [commits](chapters/chapter_4/section_4.md)
     * [licensing](chapters/chapter_4/section_8.md)
+* [examples](chapters/chapter_5/README.md)
+    * [Simple Python Destination](chapters/chapter_5/section_1.md)
+    * [Simple Java Destination](chapters/chapter_5/section_2.md)
