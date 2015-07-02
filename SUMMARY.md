@@ -28,3 +28,4 @@
 * [examples](chapters/chapter_5/README.md)
     * [Simple Python Destination](chapters/chapter_5/section_1.md)
     * [Simple Java Destination](chapters/chapter_5/section_2.md)
+    * [Python Kafka Destination](chapters/chapter_5/section_3.md)
