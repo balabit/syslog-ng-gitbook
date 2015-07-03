@@ -174,3 +174,6 @@ log {
 };
 
 ```
+
+### Python-specific Notes
+You must have the folder containing your python class present in the PYTHONPATH directory. In bash, you can add this by typing export PYTHONPATH=$PYTHONPATH:/path/to/folder
