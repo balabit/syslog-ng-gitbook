@@ -8,3 +8,5 @@ In this chapter we would like to provide you with tutorials and code examples fo
 
 * **Writing a Kafka Module in Python** Tutorial for implementing a python destination which sends messages to Apache Kafka
 
+* **Osquery and Elasticsearch** Tutorial for first sending messages from osquery to syslog-ng, and then from syslog-ng to Elasticsearch.
+
