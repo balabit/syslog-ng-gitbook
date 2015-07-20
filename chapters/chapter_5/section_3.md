@@ -15,16 +15,16 @@ destination python_to_kafka {
                 class("pythonkafka.KafkaDestination")
                 on-error("fallback-to-string")
 
-                option("host","127.0.0.1")
-		option("port","9092")
-                option("topic","testtopic")
+                host("127.0.0.1")
+		port("9092")
+                topic("testtopic")
                 value-pairs(scope(rfc5424))
 	        );
                 };
 
 ```
 
-You will see that this destination takes three "option" parameters. Syslog-ng's python module allows you to pass multiple options, each as a name-value pair. They are combined into a single dict and sent to your python script's "init" function (not "__init__" or any other variation thereof).
+You will see that this destination takes the parameters "host", "port", and "topic". These are not specifically coded into syslog-ng's python interface. Syslog-ng's python module allows you to pass arbitrary options from the config file into Python, each as a name-value pair. They are combined into a single dict and sent to your python script's "init" function (not "__init__" or any other variation thereof).
 
 Kafka works by grouping messages by topic. Clients can pull messages from topics of their choosing. By specifying topic, you can specify which clients get which messages.
 
@@ -135,9 +135,10 @@ destination python_to_kafka {
                 class("pythonkafka.KafkaDestination")
                 on-error("fallback-to-string")
 
-                option("host","127.0.0.1")
-		option("port","9092")
-                option("topic","test")
+                host("127.0.0.1")
+		port("9092")
+                topic("testtopic")
+
                 value-pairs(scope(rfc5424))
 	        );
                 };
