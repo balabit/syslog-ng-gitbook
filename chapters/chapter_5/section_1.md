@@ -32,7 +32,7 @@ Specifies what to do when a message can't be properly parsed.
 
 Specifies which name-value pairs will be generated from the message and passed in a dictionary to the python script
 
-
+You can also include other arbitrary options in the config file, and these will be sent to Python in the form of a dictionary. Check out the chapter "Writing an Apache Kafka module in Python" if you want to learn more about this.
 
 ###The LogDestination class
 
@@ -174,3 +174,6 @@ log {
 };
 
 ```
+
+### Python-specific Notes
+You must have the folder containing your python class present in the PYTHONPATH directory. In bash, you can add this by typing export PYTHONPATH=$PYTHONPATH:/path/to/folder

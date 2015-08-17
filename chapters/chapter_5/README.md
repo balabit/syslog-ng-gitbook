@@ -5,3 +5,8 @@ In this chapter we would like to provide you with tutorials and code examples fo
 * **Getting started with implementing Python destinations** Simple tutorial on implementing a python destination which writes to a file.
 
 * **Getting started with implementing Java destinations** Simple tutorial on implementing a Java destination which writes to a file.
+
+* **Writing a Kafka Module in Python** Tutorial for implementing a python destination which sends messages to Apache Kafka
+
+* **Osquery and Elasticsearch** Tutorial for first sending messages from osquery to syslog-ng, and then from syslog-ng to Elasticsearch.
+

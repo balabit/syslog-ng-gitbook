@@ -2,40 +2,57 @@
 
 Java is one of the most widely used programming languages, and being able to write syslog-ng destinations in Java will allow you to easily interface with any Java codebase.  In this section, you will learn how to create a java destination for syslog-ng which takes messages and logs them to a file. This tutorial assumes a basic understanding of Java.
 
+
 ###The syslog-ng config file
 
-To create a Java destination, you will need to specify the destination in your syslog-ng configuration file.
+To create a Java destination, you will need to specify the destination of your compiled Java destination in your syslog-ng configuration file. It must be compiled into either a .class file or a .jar file. 
+If compiled into a .class file, the class path argument must be the folder containing the .class file.
 
-Here is an example of a python destination in the config file:
+Here is an example of a Java destination in the config file, where the java destination is compiled to a .class file:
 
 ```c
 destination java_to_file{
   java(
     class_name("SampleJavaDestination")
-    class_path("/home/adam/work/projects/javatext/out/production/samplejava/")
+    class_path("/home/user/work/projects/javatext/out/production/samplejava/")
     option("name", "value")
-    option("filepath", "/home/adam/example.txt")
+    option("filepath", "/home/user/example.txt")
   );
 };
 
 ```
 
-You will see that this Java destination requires a few parameters: of the parameters listed here, only the first two are absolutely necessary. The others are destination-specific options that the destination designer can require.
+If you compile your Java destination to a .jar file, you must instead specify the full path to the jar file in the class_path, and include the path inside the jar file in class_path.
 
-#### Class_name
+```c
+destination d_local {
+  java(
+    class_path("/usr/lib/syslog-ng/3.6/elasticsearch.jar:/usr/share/elasticsearch/lib/elasticsearch-1.4.0.jar:/usr/s\
+hare/elasticsearch/lib/lucene-core-4.10.2.jar")
+    class_name("org.syslog_ng.destinations.ElasticSearch")
+    template("$(format-json --scope rfc5424 --exclude DATE --key ISODATE)")
+    option("cluster" "cl1")
+    option("index" "syslog")
+    option("type" "test")
+    option("server" "192.168.1.104")
+    option("port" "9300")
+  );
+};
 
-The syntax for the class parameter is the name of the compiled Java .class file without the .class extension
 
-#### class_path
+```
 
-This is the location of the folder containing the file specified in class_name
+
+You will see that this Java destination requires a few parameters: of the parameters listed here, only class_path and class_name are absolutely necessary. The others are destination-specific options that the destination designer can require.
+
 
 
 
 
 ###The SampleJavaDestination class
 
-To interface with syslog-ng, you will need a class that looks something like this:
+To interface with syslog-ng, you will need to extend the TextLogDestination or StructuredLogDestination abstract class, located in the SyslogNg.jar file, which can be found in the moduledir after make install.
+The class you extend will end up looking something like this:
 
 ```java
 
@@ -186,3 +203,5 @@ public class SampleJavaDestination extends TextLogDestination {
 }
         
 ```
+### Java-specific Notes
+To use a syslog-ng java destination, you have to add the path of the libjvm.so to the LD_LIBRARY_PATH.
