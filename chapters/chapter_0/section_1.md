@@ -2,24 +2,27 @@
 
 ##### written by Laszlo Budai
 
-[ref:obs-lbudai]: https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng-3.6
+[ref:obs-lbudai-36]: https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng-3.6
+[ref:obs-lbudai-37]: https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng
 
 ## Introduction
 
 This chapter describes how the user can install syslog-ng on Debian and on Ubuntu
 operating systems form our APT repository.
 
-## syslog-ng 3.6.4
+## syslog-ng
 
 ## Install syslog-ng from APT repository
 
 The syslog-ng team has an unofficial APT repo hosted by OBS for Debian and Ubuntu.
-First release of syslog-ng is available in the OBS repository is 3.6.4.
-Packaging structure following the original one created by algernon for Debian systems.
-This is basically a modular packaging strategy which we want to keep for the upcoming
-syslog-ng-3.7, too. Packaging for 3.7 is still under development.
+Available version in the OBS repository :
+ * 3.6.4
+ * 3.7.1
 
-Repository is available [here][ref:obs-lbudai].
+Packaging structure following the original one created by algernon for Debian systems.
+This is basically a modular packaging strategy.
+
+Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-37] .
 
 ### Supported Debian and Ubuntu releases
  * Debian 7.0 (without systemd)
@@ -29,7 +32,7 @@ Repository is available [here][ref:obs-lbudai].
  * Ubuntu 14.10
  * Ubuntu 15.04
 
-### Available modules
+### Available modules (for both 3.6 and 3.7)
  * syslog-ng-mod-amqp
  * syslog-ng-mod-geoip
  * syslog-ng-mod-graphite
@@ -42,7 +45,14 @@ Repository is available [here][ref:obs-lbudai].
  * syslog-ng-mod-sql
  * syslog-ng-mod-stomp
 
-### Available modules from syslog-ng-incubator
+### Modules available only for 3.7.1
+ * syslog-ng-mod-java
+ * syslog-ng-mod-elastic
+ * syslog-ng-mod-hdfs
+ * syslog-ng-mod-http
+ * syslog-ng-mod-kafka
+
+### Available modules from syslog-ng-incubator for 3.6 series
  * syslog-ng-mod-basicfuncs-plus
  * syslog-ng-mod-java
  * syslog-ng-mod-trigger
@@ -52,20 +62,22 @@ Repository is available [here][ref:obs-lbudai].
  * syslog-ng-mod-kafka
  * syslog-ng-mod-lua
 
+### Modules for 3.7 are not available currently, we are working on that
+
 ### Example
   1. get release key
 
   ```
-  wget -qO -  http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng-3.6/Debian_8.0/Release.key | sudo apt-key add -
+  wget -qO -  http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/Debian_8.0/Release.key | sudo apt-key add -
   ```
 
   2. add repo to APT sources
 
   ```
   /etc/apt/sources.list.d/syslog-ng-obs.list
-  deb  http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng-3.6/Debian_8.0 ./
+  deb  http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/Debian_8.0 ./
   apt-get update
-  apt-get install syslog-ng-core=3.6.4-1
+  apt-get install syslog-ng-core=3.7.1-1
   ```
 
 You can replace `Debian_8.0` to any of the supported systems.
