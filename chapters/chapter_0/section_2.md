@@ -22,9 +22,9 @@ problems with a best effort.
 
 If you want to install the latest available syslog-ng version, you need to add
 one of the [OBS repositories of Peter Czanik][ref:obs-czp-sub] first. For
-version 3.6 use the following command:
+version 3.7 use the following command:
 ```shell
-zypper ar http://download.opensuse.org/repositories/home:/czanik:/syslog-ng36/openSUSE_13.2/ syslog-ng36
+zypper ar http://download.opensuse.org/repositories/home:/czanik:/syslog-ng37/openSUSE_13.2/ syslog-ng37
 ```
 This command line refers to the latest distribution an syslog-ng versions at the
 time of writing, you might need to change either one or both version numbers.
@@ -46,7 +46,6 @@ S | Name            | Summary                          | Type
   | syslog-ng       | The new-generation syslog-daemon | package
   | syslog-ng-devel | Development files for syslog-ng  | package
   | syslog-ng-geoip | GeoIP support                    | package
-  | syslog-ng-json  | JSON output support              | package
   | syslog-ng-redis | Redis destination support        | package
   | syslog-ng-smtp  | SMTP output support              | package
   | syslog-ng-sql   | SQL support using DBI            | package
@@ -57,7 +56,7 @@ S | Name            | Summary                          | Type
 Choose the package(s) you need and install them:
 
 ```shell
-zypper -v in syslog-ng syslog-ng-json
+zypper -v in syslog-ng syslog-ng-sql
 ```
 
 There will be a conflict, as by default logging to `jorunald` is enabled. The
