@@ -288,10 +288,10 @@ In `dummy_dd_new`, we pass these function pointers to the base classes.
 Our example overrides these 6 virtual methods:
 
 - `init (dummy_dd_init)`: destination constructor
-- `free_fn (dummy_dd_free)`: destionation destructor
+- `free_fn (dummy_dd_free)`: destination destructor
 - `thread_init (dummy_worker_thread_init)`: worker thread initialization
 - `thread_deinit (dummy_worker_thread_deinit)`: worker thread deinitialization
-- `disconnect (dummy_dd_disconnect)`: destionation disconnects (on error or drop)
+- `disconnect (dummy_dd_disconnect)`: destination disconnects (on error or drop)
 
 The most important method is the `insert (dummy_worker_insert)`, where you can format the received message and send to an actual destination.
 
@@ -401,7 +401,7 @@ dummy_option
 ```
 ### Makefile
 
-You should create a `Makefile.am` automake file to build the destionation module.
+You should create a `Makefile.am` automake file to build the destination module.
 
 ```Makefile
 module_LTLIBRARIES          +=          \
