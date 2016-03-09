@@ -4,7 +4,3 @@ In this chapter we are going to introduce you the project and repository archite
 to develop syslog-ng. Understanding these basics is crucial before starting your contribution 
 to the project. Without speaking the same language on structure of development the project can
 get easily obfuscated that makes further contribution impossible.
-
-If you lack something (or something is not clear enough) after reading this chapter, 
-[please contact](https://waffle.io/balabit/syslog-ng-gitbook) to help us improve the usability of this book.
-
