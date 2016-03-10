@@ -25,7 +25,7 @@ superuser prviliges.
 
 ## Installing and running without superuser privileges
 
-You may need to test syslog-ng but don't have superuser privileges. You can
+You may need to test syslog-ng without having superuser privileges. You can
 install syslog-ng into a custom location and run it without any privilege. This
 solution is fine until you need to read from `/dev/log` or listen to ports
 under 1024.
@@ -43,22 +43,22 @@ $ make
 $ make install
 ```
 
-This way `make install` won't need superuser privileges and you can have
+This way the `make install` command will not require superuser privileges and you can have
 multiple versions from syslog-ng on your computer.
 
 # Finding bugs
 
-Unfortunately every software has bugs and syslog-ng is not an exection. When
-you report the problem to the developers they may need some extra information
+Unfortunately every software has bugs and syslog-ng is not an exeption. When
+you report the problem to the developers they mighr need some extra information
 to reproduce the issue in-house. In this section we introduce you to some frequently
 used tools which may greatly simplify the bug hunting.
 
 # Finding memory leaks
 
 We suggest to use two tools to track down these problems. `Valgring` can detect
-memory leaks and many other things, it's available on a lot of operating
+memory leaks and many other things, it is available on a lot of operating
 systems but it greatly slows down syslog-ng. `heaptrack` is very convenient to
-use, it's faster than `valgrind` but it isn't distributed as a binary package.
+use, it is faster than `valgrind` but it is not distributed as a binary package.
 You also need a Linux with a decent C++11 compiler.
 
 ## Installing valgrind
@@ -158,18 +158,18 @@ It will create a gzip file and after you stopped it, it prints something like th
   heaptrack_print -l /home/milian/heaptrack.yourapp.12345.gz | less
 ```
 
-The output of `heaptrack_print` gives you a lot of information about memory
-leaks. The gzip file will be huge (some gigs or more) and `heaptrack_print`
-will fully consume one of your CPUs when it runs. It's not so slow as valgrind
-but you'll notice the decreased performance.
+The output of `heaptrack_print` provides you with a lot of information about memory
+leaks. The Gzip file will be huge (some gigabytes or more) and `heaptrack_print`
+will fully consume one of your CPUs when it runs. It is not as slow as valgrind
+but you will notice the decreased performance.
 
-You may generate nice and useful graphs with `heaptrack`. Just run pass the
+You can generate nice and useful graphs with `heaptrack`. To do this, run pass the
 `-M` option to it. The massif-visualizer program can parse the output file and
 create diagrams like this:
 
 ![Figure 1-1](images/massif_visualizer.png)
 
-You can tune the result with `--massif-threshold` and `--massif-detailed-freq`.
+You can fine-tune the result with `--massif-threshold` and `--massif-detailed-freq`.
 
 If you are interested in heaptrack, you can find more information here:
 
