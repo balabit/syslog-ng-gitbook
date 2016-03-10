@@ -10,7 +10,7 @@ about how to start.
 * **tools:** description of tools that we use during the development process
 * **issues:** description of conventions how to use them, write them
 * **commits:** description of conventions when writing messages, trying to answer the
-question what makes a good commit message
+question of what makes a good commit message
 * **features:** description of feature proposals, branches, how to use them
 * **bugs:** description of bug reports, conventions worth following when fixing bugs
 * **process:** high-level overview on the process of contribution
