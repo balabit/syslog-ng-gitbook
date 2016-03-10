@@ -79,9 +79,7 @@ that is hidden in your code. It also categorize your defects on many different a
 kind and calculates defect density that can be compared to other open-source projects. 
 Coverity Scan can be integrated to Travis CI if needed in order to run the analyzation on code automatically.
 
-You can also have Coverity Scan on your fork but we don’t advise it for it takes a long time to configure and this 
-analyzis can be run only limited times a week for open-source projects. We will run analyzis before every releases to
-solve defects.
+You can also have Coverity Scan on your fork but we do not advise it because it takes a long time to configure and this analysis can be run only limited times a week for open-source projects. We will run analysis before every release to solve defects.
 
 [Coverity website](http://coverity.com)
 
