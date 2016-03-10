@@ -9,26 +9,24 @@
 
 ## Introduction
 
-Syslog-ng has been available in openSUSE and SLES for many years. The included
+The syslog-ng application has been available in openSUSE and SLES for many years. The included
 version usually lags behind a version or more. Up to date syslog-ng packages for
-recent openSUSE and SLES releases are available in the [OBS repositories of Peter Czanik][ref:obs-czp-sub]. Depending on the distribution release, syslog-ng, rsyslog or
-systemd's journald (package `systemd-logger`) are installed as default logging
+recent openSUSE and SLES releases are available in the [OBS repositories of Peter Czanik][ref:obs-czp-sub]. Depending on the distribution release, syslog-ng, Rsyslog or
+systemd's journald (package `systemd-logger`) are installed as the default logging
 solution.
 
-None of these packages are officially supported by BalaBit, but we help resolving
-problems with a best effort.
+None of these packages are officially supported by Balabit, but we try to help resolving
+problems with our best effort.
 
 ## Using the latest syslog-ng version
 
-If you want to install the latest available syslog-ng version, you need to add
-one of the [OBS repositories of Peter Czanik][ref:obs-czp-sub] first. For
-version 3.6 use the following command:
+If you want to install the latest available syslog-ng version, add one of the [OBS repositories of Peter Czanik][ref:obs-czp-sub] first. For version 3.6 use the following command:
 ```shell
 zypper ar http://download.opensuse.org/repositories/home:/czanik:/syslog-ng36/openSUSE_13.2/ syslog-ng36
 ```
-This command line refers to the latest distribution an syslog-ng versions at the
-time of writing, you might need to change either one or both version numbers.
-You can skip this step, if you don't need the latest syslog-ng version.
+This command line refers to the latest distribution of syslog-ng versions at the
+time of writing. You might need to change either one or both version numbers.
+You can skip this step, if you do not need the latest syslog-ng version.
 
 ## Checking available subpackages
 
@@ -60,8 +58,8 @@ Choose the package(s) you need and install them:
 zypper -v in syslog-ng syslog-ng-json
 ```
 
-There will be a conflict, as by default logging to `jorunald` is enabled. The
-`systemd-logger` package can be safely deleted: choose number one!
+There will be a conflict, as by default logging to `journald` is enabled. The
+`systemd-logger` package can be safely deleted: choose number one.
 
 ```shell
  Solution 1: deinstallation of systemd-logger-210-25.16.1.x86_64
@@ -81,7 +79,7 @@ is often called by openSUSE guys as:
 rcsyslog start
 ```
 
-*Note:* it's referred to as `syslog` in init scripts, as it's a wrapper among
+*Note:* it is referred to as `syslog` in init scripts, because it is a wrapper among
 different syslog implementations.
 
 ## Testing syslog-ng
@@ -93,7 +91,7 @@ May 15 17:21:51 linux-uv4b syslog-ng[1831]: syslog-ng starting up; version='3.5.
 May 15 17:27:38 linux-uv4b root: this is a test
 ```
 
-*Note:* for more read [run first][ref:run] guide.
+*Note:* for more information, read the [run first][ref:run] guide.
 
 
 
