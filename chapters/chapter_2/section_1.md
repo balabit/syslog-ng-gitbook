@@ -1,4 +1,4 @@
-# fetching dependencies
+# Fetching dependencies
 
 [gh:glib]: http://github.com/GNOME/glib
 [ref:flex]: http://flex.sourceforge.net/
@@ -14,8 +14,8 @@
 [gh:rabbitmq-c]: http://github.com/alanxz/rabbitmq-c
 [ref:docbook]: http://www.sagehill.net/docbookxsl/
 
-Like every project syslog-ng also uses other libraries and projects. 
-That’s why these dependencies must be fetched before compiling. 
+Like every project, syslog-ng also uses other libraries and projects. 
+That is why these dependencies must be fetched before compiling. 
 In this section we list these libraries and version restrictions.
 
 |Dependency                     |   Version    |
