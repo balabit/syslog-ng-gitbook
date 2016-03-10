@@ -10,9 +10,8 @@
 
 ## Introduction
 
-Syslog-ng has been available in FreeBSD ports for many years. Recently, thanks
-to the hard work of the FreeBSD team, syslog-ng is also available as a ready to
-install package.
+The syslog-ng application has been available in FreeBSD ports for many years. Recently, thanks
+to the hard work of the FreeBSD team, syslog-ng is also available as a ready-to-install package.
 
 The default configuration for `syslog-ng` in ports contains only the most
 important dependencies. If you use a package, this is how your package is
@@ -33,12 +32,12 @@ The numbered ports are old, but still receive at least security updates. As most
 people in real life, we will use the latest stable version in the rest of this
 document.
 
-You can view the current list of available posrts by looking into
+You can view the current list of available ports by looking into
 `/usr/ports/sysutils` and listing `syslog-ng*` or on the web using
 [Freshports][ref:freshports]
 
-None of these packages are officially supported by BalaBit, but we help resolving
-problems with a best effort.
+None of these packages are officially supported by Balabit, but we try to help resolving
+problems with our best effort.
 
 ## Installing syslog-ng from package
 
@@ -113,7 +112,7 @@ syslog_ng_enable="YES
 ```
 
 
-*Note:* for more read [run first][ref:run] guide.
+*Note:* for more information read the [run first][ref:run] guide.
 
-*Note:* for more read syslog-ng [documentation][ref:docs]
+*Note:* for more information read the syslog-ng [documentation][ref:docs]
 
