@@ -1,15 +1,15 @@
-# git structure
+# Git structure
 
 When a lot of people contribute on the same project it is impossible not to use 
 some kind of version control system to track the evolution of the development.
-For we love open-source solutions and use GitHub to publish our code it was 
-natural to use git as a VCS. 
+Because we love open source solutions and use GitHub to publish our code it was 
+natural to use Git as a version control system. 
 
 We are going to give you a deeper insight of contributing to the code in
 chapter: [contribute](). Here we are trying to keep the focus on the structure
 of the repository.
 
-Basically the development happen in forked repos so that's not our concern what 
+Basically the development happens in forked repos so that is not our concern what 
 structure you use. When sending a PR to the upstream there are some guidelines
 according to branching and naming conventions, though.
 
