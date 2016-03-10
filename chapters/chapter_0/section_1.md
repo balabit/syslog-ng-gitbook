@@ -7,19 +7,19 @@
 
 ## Introduction
 
-This chapter describes how the user can install syslog-ng on Debian and on Ubuntu
-operating systems form our APT repository.
+This chapter describes how you can install syslog-ng on Debian and on Ubuntu
+operating systems from our APT repository.
 
 ## syslog-ng
 
 ## Install syslog-ng from APT repository
 
-The syslog-ng team has an unofficial APT repo hosted by OBS for Debian and Ubuntu.
-Available version in the OBS repository :
+The syslog-ng team has an unofficial APT repository hosted by OBS for Debian and Ubuntu.
+Available versions in the OBS repository :
  * 3.6.4
  * 3.7.1
 
-Packaging structure following the original one created by algernon for Debian systems.
+The packaging structure following the original one was created by algernon for Debian systems.
 This is basically a modular packaging strategy.
 
 Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-37] .
@@ -52,7 +52,7 @@ Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-3
  * syslog-ng-mod-http
  * syslog-ng-mod-kafka
 
-### Available modules from syslog-ng-incubator for 3.6 series
+### Available modules from syslog-ng Incubator for the 3.6 series
  * syslog-ng-mod-basicfuncs-plus
  * syslog-ng-mod-java
  * syslog-ng-mod-trigger
