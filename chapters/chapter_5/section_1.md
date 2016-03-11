@@ -1,12 +1,12 @@
 # Getting started with implementing Python destinations
 
-Python is a popular easy-to-use, high-level language which makes writing code fun and easy. Syslog-ng supports writing destinations in python, allowing you to easily extend the capabilities of syslog-ng for your own needs. In this section, you will learn how to create a python destination for syslog-ng which takes messages and logs them to a file. This tutorial assumes a basic understanding of python.
+Python is a popular, easy-to-use, high-level language that makes writing code fun and easy. The syslog-ng application supports writing destinations in Python, allowing you to easily extend the capabilities of syslog-ng for your own needs. In this section, you will learn how to create a Python destination for syslog-ng, which takes messages and logs them to a file. This tutorial assumes a basic understanding of Python.
 
-###The syslog-ng config file
+###The syslog-ng configuration file
 
-To create a python destination, you will need to specify the destination in your syslog-ng configuration file.
+To create a Python destination, you will need to specify the destination in your syslog-ng configuration file.
 
-Here is an example of a python destination in the config file:
+The following example demonstrates a Python destination in the configuration file:
 
 ```c
 destination python_to_file {
@@ -18,21 +18,21 @@ destination python_to_file {
                 };
 ```
 
-You will see that python destinations require three parameters: Class, on-error, and value-pairs. Refer to the syslog-ng OSE documentation for a more thorough explanation of these
+You will see that the Python destination requires three options: `class()`, `on-error()`, and `value-pairs()`. Refer to the syslog-ng OSE documentation for a more thorough explanation of these options.
 
-#### Class
+#### class()
 
-The syntax for the class parameter is filename-without-extension.ClassName
+The syntax for the class parameter is `<filename-without-extension>.<ClassName>`.
 
-#### on-error
+#### on-error()
 
-Specifies what to do when a message can't be properly parsed. 
+Specifies what to do when a message cannot be properly parsed. 
 
-#### Value-pairs
+#### value-pairs()
 
-Specifies which name-value pairs will be generated from the message and passed in a dictionary to the python script
+Specifies which name-value pairs will be generated from the message and passed in a dictionary to the Python script.
 
-You can also include other arbitrary options in the config file, and these will be sent to Python in the form of a dictionary. Check out the chapter "Writing an Apache Kafka module in Python" if you want to learn more about this.
+You can also include other arbitrary options in the configuration file. These will be sent to Python in the form of a dictionary. Check out the chapter "Writing an Apache Kafka module in Python" if you want to learn more about this topic.
 
 ###The LogDestination class
 
@@ -70,13 +70,13 @@ To interface with syslog-ng, you will need a class with these methods:
         pass
 ```
 
-When syslog-ng starts, it will attempt to run the init method. This method should do any initialization that needs to be done at the start of the program.
+When syslog-ng starts, it will attempt to run the init method. This method should do any initialization that needs to be performed at the start of the program.
 
-Whenever a new message is generated and fed to your python script, a python dictionary will be passed to the send function with name-value pairs specified in the relevant syslog-ng config file.
+Whenever a new message is generated and fed to your Python script, a Python dictionary is passed to the sent function with name-value pairs specified in the relevant syslog-ng configuration file.
 
-To put it all together, here is a sample python class that writes all name-value pairs given to a file, and the accompanying syslog-ng config file.
+The following two examples put it all together. A sample python class that writes all name-value pairs given to a file, and the accompanying syslog-ng configuration file.
 
-Python file:
+#### Example: Python file #### 
 
 ```python
 
@@ -147,7 +147,7 @@ class TextDestination(LogDestination):
 
         
 ```
-Syslog-ng Config File:
+#### Example: syslog-ng configuration file #### 
 ```c
 #############################################################################
 #
@@ -175,5 +175,5 @@ log {
 
 ```
 
-### Python-specific Notes
-You must have the folder containing your python class present in the PYTHONPATH directory. In bash, you can add this by typing export PYTHONPATH=$PYTHONPATH:/path/to/folder
+### Python-specific notes
+You must have the folder containing your python class present in the PYTHONPATH directory. In bash, you can add this by typing `export PYTHONPATH=$PYTHONPATH:/path/to/folder`.
