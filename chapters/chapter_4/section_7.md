@@ -1,14 +1,14 @@
-# process
+# Process
 
 [ar:issue-tracker]: https://github.com/balabit/syslog-ng/issues 
 
 Of course, we also accept patches. If you want to submit a patch, the
-guidelines are very, very simple:
+guidelines the following:
 
  1. Open an issue first, if there is none open for the particular
     issue for the topic already in the
     [issue tracker][ar:issue-tracker]. That way, other contributors
-    and developers can comment the issue and the patch.
+    and developers can comment on the issue and the patch.
  2. If you submit a pull request that fixes an existing issue, mention
     the issue somewhere in the pull request, so we can close the
     original issue as well.
@@ -23,11 +23,9 @@ guidelines are very, very simple:
     against the latest one only, and mention which other branches are
     affected. There is no need to submit pull requests for each
     branch.
- 7. If possible, write tests! We love tests.
+ 7. If possible, write tests. We love tests.
  8. A well-documented pull request is much easier to review and merge.
 
 
 Before submitting a separate module, please consider submitting it to
-the [Incubator](https://github.com/balabit/syslog-ng-incubator) first,
-because it is easier to have your code accepted there. The Incubator
-is the repository of new and experimental modules.
+the [Incubator](https://github.com/balabit/syslog-ng-incubator) first, because it is easier to have your code accepted there. The Incubator is the repository of new and experimental modules.
