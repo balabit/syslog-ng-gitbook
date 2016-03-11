@@ -1,6 +1,6 @@
 # Git structure
 
-When a lot of people contribute on the same project it is impossible not to use 
+When a lot of people contribute on the same project it is impossible not to use
 some kind of version control system to track the evolution of the development.
 Because we love open source solutions and use GitHub to publish our code it was 
 natural to use Git as a version control system. 
@@ -16,27 +16,20 @@ according to branching and naming conventions, though.
 ## Branching
 
 ### master
-Master stands for the absolute upstream. Main branch of the repository.
-
-### f/loremipsum
-* **f:** represents that it is a feature or fix branch that adds a new feature or fixes a bug
-* **loremipsum:** short name of the content of the branch
-
-_example (feauture)_: f/templatable-recipients
-
-_example (bug)_: f/memleak-in-queueing
+Master stands for the absolute upstream, most of the development happens on this branch. If you
+want to contribute a new feature of you should send your Pull Request against this branch.
 
 ### X.X/master
 Older version of the project.
 
-X.X stands for a version number 3.5/3.6/3.7 of the project. 
+X.X stands for a version number 3.5/3.6/3.7 of the project. These branches receive mostly
+bug fixes.
 
-_example_: 3.6/master
+_example_: 3.7/master
 
-### X.X/f/loremipsum
-Feature or bugfix branch for an older version of the project.
+### loremipsum
+Every other branch either adds a new feature of fixes a bug. We used to prefix all feature
+branches with `f/` but we no longer maintain this practice.
 
-X.X stands for a version number 3.5/3.6/3.7 of the project. 
-
-_example (bug)_: 3.6/f/memleak-in-queueing
-
+If you send a bug fix, use the `fix-` prefix, like `fix-memleak-in-queueing`. If you implemented a new feature,
+use some descriptive name for your branch, like `add-kafka-destination`.

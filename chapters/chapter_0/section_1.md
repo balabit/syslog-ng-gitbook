@@ -18,6 +18,7 @@ The syslog-ng team has an unofficial APT repository hosted by OBS for Debian and
 Available versions in the OBS repository :
  * 3.6.4
  * 3.7.1
+ * 3.7.2
 
 The packaging structure following the original one was created by algernon for Debian systems.
 This is basically a modular packaging strategy.

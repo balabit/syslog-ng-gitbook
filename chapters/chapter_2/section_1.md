@@ -7,7 +7,7 @@
 [ref:libtool]: http://www.gnu.org/software/libtool/
 [ref:automake]: http://www.gnu.org/software/automake/
 [ref:bison]: http://www.gnu.org/software/bison/
-[gh:eventlog]: http://github.com/eldarion/eventlog
+[gh:eventlog]: https://github.com/balabit/eventlog
 [ref:pcre]: http://www.pcre.org
 [gh:ivykis]: http://github.com/buytenh/ivykis
 [gh:json-c]: http://github.com/json-c/

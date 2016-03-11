@@ -1,5 +1,6 @@
-{% extends "templates/error_under_constr.md" %}
-{% block title %}
-# compile first
-{% endblock %}
+# Compile first
 
+This chapter describes the building and testing process of syslog-ng.
+
+If you want to develop syslog-ng, you should be familiar with building syslog-ng
+from source.
