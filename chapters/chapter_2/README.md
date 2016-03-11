@@ -1,4 +1,4 @@
-# compile first
+# Compile first
 
 This chapter describes the building and testing process of syslog-ng.
 
