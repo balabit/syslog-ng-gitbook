@@ -1,12 +1,12 @@
 ## Tutorials
 
-In this chapter we would like to provide you with tutorials and code examples for syslog-ng development. The examples and tutorials included here are not guaranteed to fully cover all of the possible things you can do with syslog-ng, or even to be _______. They are simply intended to be easily-approachable samples so you can take what you've learned here and build upon it.
+In this chapter we would like to provide you with tutorials and code examples for syslog-ng development. These examples and tutorials are intended to give a quick insight to some of the solutions syslog-ng can provide you with. We hope that you can take what you have learned here and build upon this knowledge. Armed with these basics, you can plunge in to discovering the depths of syslog-ng and the hundreds of use cases that you can cover with this solution. 
 
-* **Getting started with implementing Python destinations** Simple tutorial on implementing a python destination which writes to a file.
+* **Getting started with implementing Python destinations** Simple tutorial on implementing a Python destination that writes to a file.
 
-* **Getting started with implementing Java destinations** Simple tutorial on implementing a Java destination which writes to a file.
+* **Getting started with implementing Java destinations** Simple tutorial on implementing a Java destination that writes to a file.
 
-* **Writing a Kafka Module in Python** Tutorial for implementing a python destination which sends messages to Apache Kafka
+* **Writing a Kafka Module in Python** Tutorial for implementing a Python destination which sends messages to Apache Kafka
 
-* **Osquery and Elasticsearch** Tutorial for first sending messages from osquery to syslog-ng, and then from syslog-ng to Elasticsearch.
+* **Osquery and Elasticsearch** Tutorial for sending messages first from osquery to syslog-ng, and then from syslog-ng to Elasticsearch.
 
