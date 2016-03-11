@@ -1,6 +1,6 @@
-# project structure
+# Project structure
 
-The following directories are the most substantial:
+The following directories are the most substantial ones:
 
 * `lib/`: common source code used by syslog-ng
 * `modules/`: each module in syslog-ng has a directory here, like `redis`
