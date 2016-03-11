@@ -1,4 +1,4 @@
-# issues
+# Issues
 
 [ar:irc]: irc://chat.freenode.net/#syslog-ng
 [ar:mailing-list]: http://lists.balabit.com/mailman/listinfo/syslog-ng
@@ -9,35 +9,33 @@
 
 One of the easiest ways to contribute to the development of syslog-ng
 is to participate in the discussions about features, bugs and design.
-Some of these discussions started on the
+Some of these discussions are started on the
 [mailing list][ar:mailing-list], some in the
 [issue tracker][ar:issue-tracker]. Bugs tagged
 [`help`][ar:issues:help] are generally good targets to contribute your
-feedback - but pretty much any open issue can be a good start!
+feedback - but pretty much any open issue can be a good start.
 
 We use [waffle.io][ar:waffle] as our story board, to prioritize issues
 and guide the development. Use this interface for browsing existing
 issues and pull requests.
 
-If you find a bug or request a feature you should create an issue for it.
-There is no ultimate form for an issue but some basic ideas should be taken
-to consideration. 
+If you find a bug or request a feature, create an issue for it.
+There is no ultimate form for an issue but consider some of these basic ideas: 
 
-#### Common bulletpoints
-* short, informative sentences
-* references to docs, other issues
-* picture (1 picture tells more than a 1000 sentences)
+#### Common bullet points
+* Short, informative sentences
+* References to documents, other issues
+* Picture (A picture is worth a thousand words)
 
-#### Bulletpoints of an issue about...
+#### Bullet points of an issue about...
 
 ##### Bug
-* short description of the phenomenon
-* configuration and architecture example to reproduce it
-* longer description of the bug (references to the documentation why you think it’s a bug)
-* possible explanations, ideas about the root cause
+* Short description of the phenomenon: what does the user experience?
+* Configuration and architecture example to reproduce it
+* Longer description of the bug (references to the documentation, why you think it is a bug)
+* Possible explanations, ideas about the root cause
 
 ##### Feature
-* short description of the request
-* use-cases (why do you think it worths implementing)
-* some ideas if you have any about how to implement the feature,
-what should be taken to consideration
+* Short description of the request
+* Use-cases (why do you think it is worth implementing)
+* Ideas about how feature implementation, what should be taken to consideration
