@@ -28,7 +28,7 @@ bug fixes.
 _example_: 3.7/master
 
 ### loremipsum
-Every other branch is either adds a new feature of fixes a bug. We used to prefix all feature
+Every other branch either adds a new feature of fixes a bug. We used to prefix all feature
 branches with `f/` but we no longer maintain this practice.
 
 If you send a bug fix, use the `fix-` prefix, like `fix-memleak-in-queueing`. If you implemented a new feature,
