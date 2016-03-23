@@ -19,6 +19,7 @@ Available versions in the OBS repository :
  * 3.6.4
  * 3.7.1
  * 3.7.2
+ * 3.7.3
 
 The packaging structure following the original one was created by algernon for Debian systems.
 This is basically a modular packaging strategy.
@@ -32,6 +33,7 @@ Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-3
  * Ubuntu 14.04
  * Ubuntu 14.10
  * Ubuntu 15.04
+ * Ubuntu 15.10 (available from 3.7.3)
 
 ### Available modules (for both 3.6 and 3.7)
  * syslog-ng-mod-amqp
@@ -78,7 +80,7 @@ Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-3
   /etc/apt/sources.list.d/syslog-ng-obs.list
   deb  http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/Debian_8.0 ./
   apt-get update
-  apt-get install syslog-ng-core=3.7.1-1
+  apt-get install syslog-ng-core
   ```
 
 You can replace `Debian_8.0` to any of the supported systems.
@@ -90,4 +92,5 @@ For Ubuntus there is a 'x' prefix, so the possible values are:
   * `xUbuntu_14.04`
   * `xUbuntu_14.10`
   * `xUbuntu_15.04`
+  * `xUbuntu_15.10` (from 3.7.3)
 
