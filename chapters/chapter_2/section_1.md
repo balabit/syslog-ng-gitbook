@@ -1,7 +1,7 @@
 # fetching dependencies
 
 [gh:glib]: http://github.com/GNOME/glib
-[ref:flex]: http://flex.sourceforge.net/
+[gh:flex]: https://github.com/westes/flex
 [gh:openssl]: http://github.com/openssl/openssl
 [ref:pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config/
 [ref:libtool]: http://www.gnu.org/software/libtool/
@@ -21,7 +21,7 @@ In this section we list these libraries and version restrictions.
 |Dependency                     |   Version    |
 |-------------------------------|--------------|
 |[glib][gh:glib]                |>=2.10.1      |
-|[flex][ref:flex]               |>=2.0.0       |
+|[flex][gh:flex]                |>=2.0.0       |
 |[openssl][gh:openssl]          |>=0.9.8       |
 |[pkg-config][ref:pkg-config]   |---           |
 |[libtool][ref:libtool]         |---           |
