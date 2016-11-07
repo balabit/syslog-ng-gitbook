@@ -1,7 +1,7 @@
 # fetching dependencies
 
 [gh:glib]: http://github.com/GNOME/glib
-[ref:flex]: http://flex.sourceforge.net/
+[gh:flex]: https://github.com/westes/flex
 [gh:openssl]: http://github.com/openssl/openssl
 [ref:pkg-config]: http://www.freedesktop.org/wiki/Software/pkg-config/
 [ref:libtool]: http://www.gnu.org/software/libtool/
@@ -13,6 +13,9 @@
 [gh:json-c]: http://github.com/json-c/
 [gh:rabbitmq-c]: http://github.com/alanxz/rabbitmq-c
 [ref:docbook]: http://www.sagehill.net/docbookxsl/
+[ref:astyle]: http://astyle.sourceforge.net/
+[gh:criterion]: http://github.com/Snaipe/Criterion
+[ref:libxml2]: http://www.xmlsoft.org/
 
 Like every project syslog-ng also uses other libraries and projects. 
 That’s why these dependencies must be fetched before compiling. 
@@ -21,7 +24,7 @@ In this section we list these libraries and version restrictions.
 |Dependency                     |   Version    |
 |-------------------------------|--------------|
 |[glib][gh:glib]                |>=2.10.1      |
-|[flex][ref:flex]               |>=2.0.0       |
+|[flex][gh:flex]                |>=2.0.0       |
 |[openssl][gh:openssl]          |>=0.9.8       |
 |[pkg-config][ref:pkg-config]   |---           |
 |[libtool][ref:libtool]         |---           |
@@ -34,4 +37,13 @@ In this section we list these libraries and version restrictions.
 |[rabbitmq-c][gh:rabbitmq-c]    |>=0.6.0       |
 |[docbook-xsl][ref:docbook]     |---           |
 
+## Development dependencies
 
+In case of contribution the following dependencies are required 
+in order to run `make check`, `make style-check` and `make style-format`.
+
+|Dependency                     |   Version    |
+|-------------------------------|--------------|
+|[astyle][ref:astyle]           |==2.05.1      |
+|[criterion][gh:criterion]      |>=2.3.0       |
+|[libxml2-utils][ref:libxml2]   |>=2.9.4       |
