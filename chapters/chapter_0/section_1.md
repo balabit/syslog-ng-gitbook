@@ -1,7 +1,5 @@
 # Debian and Ubuntu
 
-##### written by Laszlo Budai
-
 [ref:obs-lbudai-36]: https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng-3.6
 [ref:obs-lbudai-37]: https://build.opensuse.org/project/show/home:laszlo_budai:syslog-ng
 
@@ -20,6 +18,7 @@ Available versions in the OBS repository :
  * 3.7.1
  * 3.7.2
  * 3.7.3
+ * 3.8.1
 
 The packaging structure following the original one was created by algernon for Debian systems.
 This is basically a modular packaging strategy.
@@ -34,12 +33,13 @@ Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-3
  * Ubuntu 14.10
  * Ubuntu 15.04
  * Ubuntu 15.10 (available from 3.7.3)
+ * Ubuntu 16.04
+ * Ubuntu 16.10
 
-### Available modules (for both 3.6 and 3.7)
+### Available modules 
  * syslog-ng-mod-amqp
  * syslog-ng-mod-geoip
  * syslog-ng-mod-graphite
- * syslog-ng-mod-journal
  * syslog-ng-mod-json
  * syslog-ng-mod-mongodb
  * syslog-ng-mod-redis
@@ -48,12 +48,17 @@ Repositories are available [here][ref:obs-lbudai-36] and [here][ref:obs-lbudai-3
  * syslog-ng-mod-sql
  * syslog-ng-mod-stomp
 
-### Modules available only for 3.7.1
+### Modules available from  3.7.1
  * syslog-ng-mod-java
  * syslog-ng-mod-elastic
  * syslog-ng-mod-hdfs
  * syslog-ng-mod-http
  * syslog-ng-mod-kafka
+ * syslog-ng-mod-kvformat
+
+### Modules available from 3.8.1
+ * syslog-ng-mod-add-contextual-data
+ * syslog-ng-mod-curl
 
 ### Available modules from syslog-ng Incubator for the 3.6 series
  * syslog-ng-mod-basicfuncs-plus
@@ -93,4 +98,6 @@ For Ubuntus there is a 'x' prefix, so the possible values are:
   * `xUbuntu_14.10`
   * `xUbuntu_15.04`
   * `xUbuntu_15.10` (from 3.7.3)
+  * `xUbuntu_16.04`
+  * `xUbuntu_16.10`
 
