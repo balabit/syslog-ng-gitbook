@@ -12,7 +12,7 @@
     * [fetching dependencies](chapters/chapter_2/section_1.md)
     * [compile](chapters/chapter_2/section_2.md)
     * [testing](chapters/chapter_2/section_3.md)
-    * [install](chapters/chapter_2/section_4.md)
+    * [cleanup](chapters/chapter_2/section_4.md)
 * [run first](chapters/chapter_3/README.md)
     * [write your first config](chapters/chapter_3/section_1.md)
     * [syslog-ng](chapters/chapter_3/section_2.md)
@@ -31,3 +31,4 @@
     * [Python Kafka Destination](chapters/chapter_5/section_3.md)
     * [Osquery and Elasticsearch](chapters/chapter_5/section_4.md)
     * [Simple Threaded C Destination](chapters/chapter_5/section_5.md)
+* [docker images for syslog-ng](chapters/chapter_6/README.md)
