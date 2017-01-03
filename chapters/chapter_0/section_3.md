@@ -18,7 +18,16 @@ At present we are not supporting OSX syslog-ng on our [official repository][gh:o
 A “non-official” support is available for [3.6][gh:ose-gregory094-osx] at [gregory094/syslog-ng][gh:ose-gregory094] 
 on GitHub but we do not plan to backport the support officially.
 
-## Installation process
+## Using homebrew
+
+Now syslog-ng is provided by [Homebrew][ref:homebrew] and gives you a stable syslog-ng install with the modules that
+is tested to function well.
+
+```
+brew install syslog-ng
+```
+
+## From source
 Like every project syslog-ng also uses different libraries and build-systems that must be installed
 for compiling and running properly. These dependencies can be satisfied by compiling every-each libs and tools manually, but I would prefer to do it the easy way. [Homebrew][ref:homebrew] is a package manager for OSX that has great community and support. You can also use it to install the dependencies you need.
 
@@ -51,12 +60,23 @@ brew install glib openssl libtool automake pkgconfig eventlog pcre bison flex
     * *Option 1:* add bison to `$PATH`
     * *Option 2:* when configuring set the environmental variable `$YACC` to bison
 
-### Compile and install
 
-In the syslog-ng folder declare the command below:
+###Configuration
 
 ```shell
-./configure && make && make install
+./configure --with-ivykis=internal --prefix=<INSTALL PATH>
+```
+
+For a minimal featureset:
+
+```shell
+./configure --with-ivykis=internal --prefix=<INSTALL PATH> --disable-amqp --disable-mongodb --disable-riemann --disable-java --disable-python
+```
+
+###Compile and install
+
+```shell
+make && make install
 ```
 
 *Note:* for options and more information, read the [compile first][ref:compile] guide.
