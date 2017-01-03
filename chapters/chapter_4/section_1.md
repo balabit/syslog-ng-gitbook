@@ -68,6 +68,49 @@ It is advised to integrate Travis CI with your forked repository to test every c
 
 [Travis CI balabit/syslog-ng](http://travis-ci.org/balabit/syslog-ng)
 
+## Criterion
+
+Criterion is a unit test framework used in the unit tests of syslog-ng. It can be compiled from 
+source or installed as it is available as a .deb package.
+
+Its documentation is extensive and full of examples. More test examples can be found in the source of 
+syslog-ng under the `tests/unit` folder.
+
+### Installation on Ubuntu
+
+```
+$ curl http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_12.04/Release.key | sudo apt-key add -
+$ echo "deb http://download.opensuse.org/repositories/home:/laszlo_budai:/syslog-ng/xUbuntu_12.04 ./" | sudo tee --append /etc/apt/sources.list.d/syslog-ng-obs.list
+$ sudo apt install criterion criterion-dev
+```
+
+[Documentation of Criterion](https://criterion.readthedocs.io/en/master/)
+
+## Astyle
+
+Astyle is a source code formatter which makes sure that all of the C sources are formatted properly. 
+Please make sure that version `2.05.1` is installed, as there might be differences between the formatting 
+of different versions.
+
+The version `2.05.1` can be also installed from the OBS repository used above.
+
+### Usage
+
+It is advised to format sources before submitting a PR. This makes easier to process PRs both for the reviewers and the contributors. To check if there is a adly formatted file run `make style-check`. To correct 
+badly formatted ones run `make style-format`.
+
+Following is the sampla output of calling these commands.
+
+```
+$ make style-check
+Checking C source files
+Formatting tests/unit/test_example.c
+Number of badly formatted files: 1
+$ make style-format
+Formatting C source files
+Formatting tests/unit/test_example.c
+```
+
 ## Coverity
 
 Coverity is an online service that helps you to analyze your code statically (Coverity Scan). It can reveal many defects
