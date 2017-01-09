@@ -113,22 +113,27 @@ class LogDestination(object):
 class TextDestination(LogDestination):
     def __init__(self):
         self.outfile = None
+        self._is_opened = False
 
     def init(self):
         self.outfile = open('/tmp/example.txt', 'a')
         self.outfile.write("initialized\n")
         self.outfile.flush()
         return True
-       
+
+    def is_opened(self):
+        return self._is_opened
+
     def open(self):
         self.outfile.write("opened\n")
         self.outfile.flush()
+        self._is_opened = True
         return True
 
     def close(self):
         self.outfile.write("closed\n")
         self.outfile.flush()
-        return True
+        self._is_opened = False
 
     def deinit(self):
         self.outfile.write("deinit\n")
