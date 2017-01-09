@@ -41,8 +41,9 @@ To interface with syslog-ng, you will need a class with these methods:
 
 ```python
     def open(self):
-        """Open a connection to the target service"""
-        """Should return False if opening fails"""
+        """Open a connection to the target service
+
+        Should return False if opening fails"""
         return True
 
     def close(self):
@@ -50,13 +51,15 @@ To interface with syslog-ng, you will need a class with these methods:
         pass
 
     def is_opened(self):
-        """Check if the connection to the target is able to receive messages"""
-        """Should return False if target is not open"""
+        """Check if the connection to the target is able to receive messages
+
+        Should return False if target is not open"""
         return True
 
     def init(self, options):
-        """This method is called at initialization time"""
-        """Should return false if initialization fails"""
+        """This method is called at initialization time
+
+        Should return False if initialization fails"""
         return True
 
     def deinit(self):
@@ -68,7 +71,7 @@ To interface with syslog-ng, you will need a class with these methods:
 
         It should return True to indicate success, False will suspend the
         destination for a period specified by the time-reopen() option."""
-        pass
+        return True
 ```
 
 When syslog-ng starts, it will attempt to run the init method. This method should do any initialization that needs to be performed at the start of the program.
@@ -79,12 +82,15 @@ The following two examples put it all together. A sample python class that write
 
 #### Example: Python file ####
 
-```python
+(Filename: `pythonexample.py`.)
 
+```python
 class LogDestination(object):
 
     def open(self):
-        """Open a connection to the target service"""
+        """Open a connection to the target service
+
+        Should return False if opening fails"""
         return True
 
     def close(self):
@@ -96,7 +102,9 @@ class LogDestination(object):
         return True
 
     def init(self, options):
-        """This method is called at initialization time"""
+        """This method is called at initialization time
+
+        Should return false if initialization fails"""
         return True
 
     def deinit(self):
@@ -108,7 +116,7 @@ class LogDestination(object):
 
         It should return True to indicate success, False will suspend the
         destination for a period specified by the time-reopen() option."""
-        pass
+        return True
 
 
 class TextDestination(LogDestination):
@@ -140,13 +148,13 @@ class TextDestination(LogDestination):
         self.outfile.write("deinit\n")
         self.outfile.flush()
         self.outfile.close();
-        return True
 
     def send(self, msg):
-        self.outfile.write("Name Value Pairs are \n")
-        
+        self.outfile.write("Name Value Pairs are:\n")
+
         for key,v in msg.items():
-            self.outfile.write(str(key)+" "+str(v)+"\n");
+            self.outfile.write(str(key) + " = " + str(v) + "\n");
+        self.outfile.write("________________________\n\n")
         self.outfile.flush()
         return True
 ```
