@@ -14,11 +14,12 @@ destination d_python_to_file {
         class("pythonexample.TextDestination")
         on-error("fallback-to-string")
         value-pairs(scope(everything))
+        options(my_sample_option("option_value"))
     );
 };
 ```
 
-You will see that the Python destination requires three options: `class()`, `on-error()`, and `value-pairs()`. Refer to the syslog-ng OSE documentation for a more thorough explanation of these options.
+You will see that the Python destination requires three options: `class()`, `on-error()`, and `value-pairs()`. Refer to the syslog-ng OSE documentation for a more thorough explanation of these options. The `options()` part is optional. The Python destination driver will receive these values during initialization.
 
 #### class()
 
@@ -53,7 +54,7 @@ To interface with syslog-ng, you will need a class with these methods:
         """Should return False if target is not open"""
         return True
 
-    def init(self):
+    def init(self, options):
         """This method is called at initialization time"""
         """Should return false if initialization fails"""
         return True
@@ -94,7 +95,7 @@ class LogDestination(object):
         """Check if the connection to the target is able to receive messages"""
         return True
 
-    def init(self):
+    def init(self, options):
         """This method is called at initialization time"""
         return True
 
@@ -115,9 +116,9 @@ class TextDestination(LogDestination):
         self.outfile = None
         self._is_opened = False
 
-    def init(self):
-        self.outfile = open('/tmp/example.txt', 'a')
-        self.outfile.write("initialized\n")
+    def init(self, options):
+        self.outfile = open("/tmp/example.txt", "a")
+        self.outfile.write("initialized with {}\n".format(options))
         self.outfile.flush()
         return True
 
@@ -164,6 +165,7 @@ destination d_python_to_file {
         class("pythonexample.TextDestination")
         on-error("fallback-to-string")
         value-pairs(scope(everything))
+        options(my_sample_option("option_value"))
     );
 };
 
