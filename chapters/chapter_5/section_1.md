@@ -9,13 +9,13 @@ To create a Python destination, you will need to specify the destination in your
 The following example demonstrates a Python destination in the configuration file:
 
 ```c
-destination python_to_file {
-            python(
-                class("betterpythonexample.TextDestination")
-                on-error("fallback-to-string")
-                value-pairs(scope(everything))
-                );
-                };
+destination d_python_to_file {
+    python(
+        class("pythonexample.TextDestination")
+        on-error("fallback-to-string")
+        value-pairs(scope(everything))
+    );
+};
 ```
 
 You will see that the Python destination requires three options: `class()`, `on-error()`, and `value-pairs()`. Refer to the syslog-ng OSE documentation for a more thorough explanation of these options.
@@ -26,7 +26,7 @@ The syntax for the class parameter is `<filename-without-extension>.<ClassName>`
 
 #### on-error()
 
-Specifies what to do when a message cannot be properly parsed. 
+Specifies what to do when a message cannot be properly parsed.
 
 #### value-pairs()
 
@@ -76,7 +76,7 @@ Whenever a new message is generated and fed to your Python script, a Python dict
 
 The following two examples put it all together. A sample python class that writes all name-value pairs given to a file, and the accompanying syslog-ng configuration file.
 
-#### Example: Python file #### 
+#### Example: Python file ####
 
 ```python
 
@@ -143,36 +143,29 @@ class TextDestination(LogDestination):
             self.outfile.write(str(key)+" "+str(v)+"\n");
         self.outfile.flush()
         return True
-
-
-        
 ```
-#### Example: syslog-ng configuration file #### 
+#### Example: syslog-ng configuration file ####
 ```c
-#############################################################################
-#
-
 @version: 3.7
 @include "scl.conf"
 
 source s_local {
-	system();
-	internal();
+    system();
+    internal();
 };
 
-destination python_to_file {
-            python(
-                class("betterpythonexample.TextDestination")
-                on-error("fallback-to-string")
-                value-pairs(scope(everything))
-                );
-                };
+destination d_python_to_file {
+    python(
+        class("pythonexample.TextDestination")
+        on-error("fallback-to-string")
+        value-pairs(scope(everything))
+    );
+};
 
 log {
     source(s_local);
-    destination(python_to_file);
+    destination(d_python_to_file);
 };
-
 ```
 
 ### Python-specific notes
