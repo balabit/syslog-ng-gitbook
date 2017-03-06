@@ -9,16 +9,17 @@ To create a Python destination, you will need to specify the destination in your
 The following example demonstrates a Python destination in the configuration file:
 
 ```c
-destination python_to_file {
-            python(
-                class("betterpythonexample.TextDestination")
-                on-error("fallback-to-string")
-                value-pairs(scope(everything))
-                );
-                };
+destination d_python_to_file {
+    python(
+        class("pythonexample.TextDestination")
+        on-error("fallback-to-string")
+        value-pairs(scope(everything))
+        options(my_sample_option("option_value"))
+    );
+};
 ```
 
-You will see that the Python destination requires three options: `class()`, `on-error()`, and `value-pairs()`. Refer to the syslog-ng OSE documentation for a more thorough explanation of these options.
+You will see that the Python destination requires three options: `class()`, `on-error()`, and `value-pairs()`. Refer to the syslog-ng OSE documentation for a more thorough explanation of these options. The `options()` part is optional. The Python destination driver will receive these values during initialization.
 
 #### class()
 
@@ -26,7 +27,7 @@ The syntax for the class parameter is `<filename-without-extension>.<ClassName>`
 
 #### on-error()
 
-Specifies what to do when a message cannot be properly parsed. 
+Specifies what to do when a message cannot be properly parsed.
 
 #### value-pairs()
 
@@ -40,8 +41,9 @@ To interface with syslog-ng, you will need a class with these methods:
 
 ```python
     def open(self):
-        """Open a connection to the target service"""
-        """Should return False if opening fails"""
+        """Open a connection to the target service
+
+        Should return False if opening fails"""
         return True
 
     def close(self):
@@ -49,13 +51,15 @@ To interface with syslog-ng, you will need a class with these methods:
         pass
 
     def is_opened(self):
-        """Check if the connection to the target is able to receive messages"""
-        """Should return False if target is not open"""
+        """Check if the connection to the target is able to receive messages
+
+        Should return False if target is not open"""
         return True
 
-    def init(self):
-        """This method is called at initialization time"""
-        """Should return false if initialization fails"""
+    def init(self, options):
+        """This method is called at initialization time
+
+        Should return False if initialization fails"""
         return True
 
     def deinit(self):
@@ -67,7 +71,7 @@ To interface with syslog-ng, you will need a class with these methods:
 
         It should return True to indicate success, False will suspend the
         destination for a period specified by the time-reopen() option."""
-        pass
+        return True
 ```
 
 When syslog-ng starts, it will attempt to run the init method. This method should do any initialization that needs to be performed at the start of the program.
@@ -76,14 +80,17 @@ Whenever a new message is generated and fed to your Python script, a Python dict
 
 The following two examples put it all together. A sample python class that writes all name-value pairs given to a file, and the accompanying syslog-ng configuration file.
 
-#### Example: Python file #### 
+#### Example: Python file ####
+
+(Filename: `pythonexample.py`.)
 
 ```python
-
 class LogDestination(object):
 
     def open(self):
-        """Open a connection to the target service"""
+        """Open a connection to the target service
+
+        Should return False if opening fails"""
         return True
 
     def close(self):
@@ -94,8 +101,10 @@ class LogDestination(object):
         """Check if the connection to the target is able to receive messages"""
         return True
 
-    def init(self):
-        """This method is called at initialization time"""
+    def init(self, options):
+        """This method is called at initialization time
+
+        Should return false if initialization fails"""
         return True
 
     def deinit(self):
@@ -107,72 +116,71 @@ class LogDestination(object):
 
         It should return True to indicate success, False will suspend the
         destination for a period specified by the time-reopen() option."""
-        pass
+        return True
 
 
 class TextDestination(LogDestination):
     def __init__(self):
         self.outfile = None
+        self._is_opened = False
 
-    def init(self):
-        self.outfile = open('/tmp/example.txt', 'a')
-        self.outfile.write("initialized\n")
+    def init(self, options):
+        self.outfile = open("/tmp/example.txt", "a")
+        self.outfile.write("initialized with {}\n".format(options))
         self.outfile.flush()
         return True
-       
+
+    def is_opened(self):
+        return self._is_opened
+
     def open(self):
         self.outfile.write("opened\n")
         self.outfile.flush()
+        self._is_opened = True
         return True
 
     def close(self):
         self.outfile.write("closed\n")
         self.outfile.flush()
-        return True
+        self._is_opened = False
 
     def deinit(self):
         self.outfile.write("deinit\n")
         self.outfile.flush()
         self.outfile.close();
-        return True
 
     def send(self, msg):
-        self.outfile.write("Name Value Pairs are \n")
-        
+        self.outfile.write("Name Value Pairs are:\n")
+
         for key,v in msg.items():
-            self.outfile.write(str(key)+" "+str(v)+"\n");
+            self.outfile.write(str(key) + " = " + str(v) + "\n");
+        self.outfile.write("________________________\n\n")
         self.outfile.flush()
         return True
-
-
-        
 ```
-#### Example: syslog-ng configuration file #### 
+#### Example: syslog-ng configuration file ####
 ```c
-#############################################################################
-#
-
 @version: 3.7
 @include "scl.conf"
 
 source s_local {
-	system();
-	internal();
+    system();
+    internal();
 };
 
-destination python_to_file {
-            python(
-                class("betterpythonexample.TextDestination")
-                on-error("fallback-to-string")
-                value-pairs(scope(everything))
-                );
-                };
+destination d_python_to_file {
+    python(
+        class("pythonexample.TextDestination")
+        on-error("fallback-to-string")
+        value-pairs(scope(everything))
+        options(my_sample_option("option_value"))
+    );
+};
 
 log {
     source(s_local);
-    destination(python_to_file);
+    destination(d_python_to_file);
 };
-
 ```
 
 ### Python-specific notes
