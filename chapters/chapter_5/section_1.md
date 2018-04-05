@@ -14,7 +14,7 @@ destination d_python_to_file {
         class("pythonexample.TextDestination")
         on-error("fallback-to-string")
         value-pairs(scope(everything))
-        options(my_sample_option("option_value"))
+        options(my_sample_option option_value)
     );
 };
 ```
@@ -173,7 +173,7 @@ destination d_python_to_file {
         class("pythonexample.TextDestination")
         on-error("fallback-to-string")
         value-pairs(scope(everything))
-        options(my_sample_option("option_value"))
+        options(my_sample_option option_value)
     );
 };
 
