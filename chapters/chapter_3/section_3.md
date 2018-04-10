@@ -21,7 +21,7 @@ The point is to pass the `--enable-debug` parameter to the `configure` script.
 
 These commands will create a debug build under the `build` directory and
 install syslog-ng under a system specific directory. Installation will require
-superuser prviliges. 
+superuser privileges.
 
 ## Installing and running without superuser privileges
 
@@ -48,14 +48,14 @@ multiple versions from syslog-ng on your computer.
 
 # Finding bugs
 
-Unfortunately every software has bugs and syslog-ng is not an exeption. When
-you report the problem to the developers they mighr need some extra information
+Unfortunately every software has bugs and syslog-ng is not an exception. When
+you report the problem to the developers they might need some extra information
 to reproduce the issue in-house. In this section we introduce you to some frequently
 used tools which may greatly simplify the bug hunting.
 
 # Finding memory leaks
 
-We suggest to use two tools to track down these problems. `Valgring` can detect
+We suggest to use two tools to track down these problems. `Valgrind` can detect
 memory leaks and many other things, it is available on a lot of operating
 systems but it greatly slows down syslog-ng. `heaptrack` is very convenient to
 use, it is faster than `valgrind` but it is not distributed as a binary package.
@@ -64,7 +64,7 @@ You also need a Linux with a decent C++11 compiler.
 ## Installing valgrind
 
 On most platforms you can use the native package manager to install `valgrind`.
-On Ubuntu Trusty you need to execute the following commmand:
+On Ubuntu Trusty you need to execute the following command:
 
 ```
 $ sudo apt-get install valgrind
@@ -76,7 +76,7 @@ On CentOS 7 just execute:
 # yum install valgrind
 ```
 
-## Running syslog-ng under valgring
+## Running syslog-ng under valgrind
 
 You can run syslog-ng under valgrind with the following command.
 
@@ -84,9 +84,9 @@ You can run syslog-ng under valgrind with the following command.
 G_SLICE=always-malloc valgrind --leak-check=full <the path where syslog-ng is installed>/sbin/syslog-ng -F
 ```
 
-You may use other paramters.  The `G_SLICE` environment variable makes the
+You may use other parameters.  The `G_SLICE` environment variable makes the
 result nicer, because you will get less false positive results. The developers
-are interested in valgring's output log.
+are interested in valgrind's output log.
 
 ## Installing `heaptrack`
 
