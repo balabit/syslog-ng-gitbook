@@ -3,7 +3,7 @@
 * [install syslog-ng on different platforms](chapters/chapter_0/README.md)
     * [Ubuntu](chapters/chapter_0/section_1.md)
     * [openSUSE](chapters/chapter_0/section_2.md)
-    * [MacOS X](chapters/chapter_0/section_3.md)
+    * [macOS](chapters/chapter_0/section_3.md)
     * [FreeBSD](chapters/chapter_0/section_4.md)
 * [get familiar with the structure](chapters/chapter_1/README.md)
     * [project structure](chapters/chapter_1/section_1.md)
