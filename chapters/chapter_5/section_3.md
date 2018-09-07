@@ -99,7 +99,7 @@ class KafkaDestination(LogDestination):
         return True
 
     def deinit(self):
-        return True
+        pass
 
     def send(self, msg):
         msg_string=str(msg)
@@ -114,7 +114,7 @@ class KafkaDestination(LogDestination):
                 return False
         return True
 
-        
+
 ```
 #### Example: syslog-ng configuration file ####
 ```c
