@@ -5,7 +5,7 @@ Java is one of the most widely used programming languages, and being able to wri
 
 ###The syslog-ng configuration file
 
-To create a Java destination, you will have to specify the destination of your compiled Java destination in your syslog-ng configuration file. It must be compiled into either a `.class` file or a `.jar` file. 
+To create a Java destination, you will have to specify the destination of your compiled Java destination in your syslog-ng configuration file. It must be compiled into either a `.class` file or a `.jar` file.
 If compiled into a `.class` file, the class path argument must be the folder containing the `.class` file.
 
 The following example demonstrates a Java destination in the configuration file, where the Java destination is compiled to a `.class` file:
@@ -62,9 +62,17 @@ public class SampleJavaDestination extends TextLogDestination {
     ...
     }
 
+    // since 3.20
+    public int flush() {
+      // In order to work, send must return with QUEUED.
+      ...
+      return SUCCESS;
+    }
+
+    // Removed in 3.20, replaced with flush
     public void onMessageQueueEmpty(){
     ...
-    }   
+    }
 
     public boolean init(){
     ...
@@ -75,16 +83,22 @@ public class SampleJavaDestination extends TextLogDestination {
     }
 
     public boolean isOpened(){
-    ... 
+    ...
     }
 
     public void close(){
     ...
     }
 
-    public boolean send(String message){
+    // After 3.20
+    public int send(String message){
     ...
     }
+
+    // Before 3.20
+    // public boolean send(String message){
+    //...
+    //}
 
 
 ```
@@ -94,6 +108,18 @@ Your class should extend either `TextLogDestination` or `StructuredLogDestinatio
 When syslog-ng starts, it will create an instance of the class, then attempt to run the init method. This method should do any initialization that needs to be performed at the start of the program.
 
 Whenever a new message is generated and fed to your Java class, the send function will be called and passed the message as a String.
+
+Return values of `send`:
+Since 3.20: send returns int. The following values are available:
+
+DROP: message is dropped by syslog-ng.
+ERROR: message is retried later (`retries` times, suspending destination for `time-reopen` in between)
+SUCCESS: send was successful
+QUEUED: destination wants to handle messages as batch, and successfully added the message to the batch. One needs to override `flush` for batching to work.
+NOT_CONNECTED: Message is put back to the queue, destination is suspended for `time-reopen` seconds.
+RETRY: message is retried immediately. After 3rd retry attempt, the message is dropped. This case is similar to ERROR, the difference is that the destination is not suspended between the attemts in the RETRY case.
+
+Prior to 3.20: send returns boolean. True is equivalent to SUCCESS. False is equivalent to ERROR.
 
 The next example is a complete (albeit basic) example. A Java class takes messages and logs them to a file, using the destination defined above.
 
@@ -190,12 +216,12 @@ public class SampleJavaDestination extends TextLogDestination {
         catch (Exception e)
         {
             InternalMessageSender.error("error in writing message :" + message);
-            return false;
+            return ERROR;
         }
-        return true;
+        return SUCCESS;
     }
 }
-        
+
 ```
 ### Java-specific notes
 To use a syslog-ng Java destination, you have to add the path of the `libjvm.so` to the `LD_LIBRARY_PATH`.
