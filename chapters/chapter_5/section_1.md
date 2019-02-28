@@ -114,10 +114,41 @@ class LogDestination(object):
     def send(self, msg):
         """Send a message to the target service
 
-        It should return True to indicate success, False will suspend the
-        destination for a period specified by the time-reopen() option."""
+        It can return boolean. Since 3.20, it can return integer
+        alternatively.
+        Boolean: True to indicate success, False will suspend the
+        destination for a period specified by the time-reopen() option.
+        After that the same message is retried until retries() times.
+
+        Integer:
+        self.SUCCESS: message sending was successful (same as boolean True)
+        self.ERROR: message sending was unsuccessful. Same message is retried.
+            (same as boolean False)
+        self.DROP: message cannot be sent, it should be dropped immediately.
+        self.QUEUED: message is not sent immediately, it will be sent with the flush method.
+        self.NOT_CONNECTED: message is put back to the queue, open method will be called until success.
+        self.RETRY: message is put back to the queue, try to send again until 3 times, then fallback to self.NOT_CONNECTED."""
+
         return True
 
+    def flush(self):
+        """Flush the queued messages
+
+        Since 3.20. It can return either a boolean or integer.
+        Send needs to return with self.QUEUED in order to work.
+        Boolean: True to indicate that the batch is successfully sent.
+        False indicates error while sending the batch. The destination is suspended
+        for time-reopen period. The messages in the batch are passed again to send, one by one.
+
+        Integer:
+        self.SUCCESS: batch sending was successful (same as boolean True)
+        self.ERROR: batch sending was unsuccessful. (same as boolean False)
+        self.DROP: batch cannot be sent, the messages should be dropped immediately.
+        self.NOT_CONNECTED: the messages in the batch is put back to the queue,
+            open method will be called until success.
+        self.RETRY: message is put back to the queue, try to send again until 3 times, then fallback to self.NOT_CONNECTED."""
+
+        return True
 
 class TextDestination(LogDestination):
     def __init__(self):
