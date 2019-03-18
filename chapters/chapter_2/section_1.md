@@ -44,6 +44,6 @@ in order to run `make check`, `make style-check` and `make style-format`.
 
 |Dependency                     |   Version    |
 |-------------------------------|--------------|
-|[astyle][ref:astyle]           |==2.05.1      |
+|[astyle][ref:astyle]           |==3.1         |
 |[criterion][gh:criterion]      |>=2.3.0       |
 |[libxml2-utils][ref:libxml2]   |>=2.9.4       |
