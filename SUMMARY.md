@@ -31,4 +31,5 @@
     * [Python Kafka Destination](chapters/chapter_5/section_3.md)
     * [Osquery and Elasticsearch](chapters/chapter_5/section_4.md)
     * [Simple Threaded C Destination](chapters/chapter_5/section_5.md)
+    * [Simple Python Source](chapters/chapter_5/section_6.md)
 * [docker images for syslog-ng](chapters/chapter_6/README.md)

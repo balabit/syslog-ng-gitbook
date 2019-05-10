@@ -11,3 +11,5 @@ In this chapter we would like to provide you with tutorials and code examples fo
 * **Osquery and Elasticsearch** Tutorial for sending messages first from osquery to syslog-ng, and then from syslog-ng to Elasticsearch.
 
 * **Simple Threaded C Destination** Tutorial for sending messages to a destination using C
+
+* **Simple Python Source** Tutorial for generating messages for syslog-ng.
