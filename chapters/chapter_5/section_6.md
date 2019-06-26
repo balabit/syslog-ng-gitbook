@@ -16,13 +16,15 @@ You can implement your own event loop, or integrate an external framework's or l
 A Python Fetcher implementation must be inherited from `syslogng.LogFetcher` class. There is one mandatory method: `fetch()`
 - `fetch()`
 
-The `fetch()` method will be called by syslog-ng whenever syslog-ng is ready to process a new message. This method needs to return a tuple of form (status, syslogng.LogMessage). Status can be `LogFetcher.FETCH_ERROR`, `LogFetcher.FETCH_NOT_CONNECTED` or `LogFetcher.FETCH_SUCCESS`.
+The `fetch()` method will be called by syslog-ng whenever syslog-ng is ready to process a new message. This method needs to return a tuple of form (status, syslogng.LogMessage). Status can be `LogFetcher.FETCH_ERROR`, `LogFetcher.FETCH_NOT_CONNECTED`, `LogFetcher.FETCH_SUCCESS`, `LogFetcher.FETCH_TRY_AGAIN` and `LogFetcher.FETCH_TRY_NO_DATA`.
 
 The `LogFetcher.FETCH_ERROR` status will result in a `close()` `open()` call, waiting `time-reopen()` seconds in between.
 
 The `LogFetcher.FETCH_NOT_CONNECTED` will result in an `open()` call after `time-reopen()` seconds in between.
 
 The `LogFetcher.FETCH_SUCCESS` status means the fetch was successful, and syslog-ng can handle the returned message.
+The `LogFetcher.FETCH_TRY_AGAIN` status means fetcher cannot provide message this time, but make the source call fetch as soon as possible.
+The `LogFetcher.FETCH_NO_DATA` status means there is no data available this time, syslog-ng can wait some time before calling fetch again. The wait time is equal to time-reopen() by default, but it might be overridden if fetch_no_data_delay(sec) is provided.
 
 The following methods are optional: `init()`, `deinit()`, `open()`, `close()`, `request_exit()`
 
@@ -87,6 +89,8 @@ class MyFetcher(LogFetcher):
         response = self.connection.getresponse()
         # return LogFetcher.FETCH_ERROR,
         # return LogFetcher.FETCH_NOT_CONNECTED,
+        # return LogFetcher.FETCH_TRY_AGAIN,
+        # return LogFetcher.FETCH_NO_DATA,
         return LogFetcher.FETCH_SUCCESS, LogMessage(response.read())
 
     def request_exit(self):
