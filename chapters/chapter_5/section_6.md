@@ -142,7 +142,7 @@ In this example: the python source will a test message in every second.
 @version: 3.21
 
 log {
-  source { python(class(PySource) options("freq" "1") flags(no-parse)); };
+  source { python(class("PySource") options("freq" "1") flags(no-parse)); };
   destination { file(/dev/stdout); };
 };
 
@@ -176,7 +176,7 @@ In this example, we will use python `AsyncIO` library to run an eventloop. Event
 @version: 3.21
 
 log {
-  source { python(class(PySource) flags(no-parse)); };
+  source { python(class("PySource") flags(no-parse)); };
   destination { file(/dev/stdout); };
 };
 
