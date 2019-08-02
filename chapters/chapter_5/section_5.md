@@ -13,7 +13,7 @@ source s_local {
 };
 
 destination d_dummy {
-    dummy("/tmp/test");
+    dummy(filename("/tmp/test"));
 };
 
 log {
@@ -37,9 +37,9 @@ modules/dummy
 - The `dummy-grammar` and `dummy-parser` files will contain the configuration grammar. Parser codes are generated from these.
 - `dummy` will implement the destination logic through interfaces.
 
-When you are writing a destination, you should extend from one of these abstract classes: `LogThrDestDriver`, `LogDestDriver`.
+When you are writing a destination, you should extend from one of these abstract classes: `LogThreadedDestDriver`, `LogDestDriver`.
 
-This example shows an empty and very simple LogThrDestDriver (threaded destination driver) implementation.
+This example shows an empty and very simple LogThreadedDestDriver (threaded destination driver) implementation.
 In this case, we have a dedicated thread so it's allowed to use blocking operations.
 
 ### Dummy Destination
@@ -78,12 +78,12 @@ This is the implementation of the destination driver. It will be built as a shar
 #include "logqueue.h"
 #include "driver.h"
 #include "plugin-types.h"
-#include "logthrdestdrv.h"
+#include "logthrdest/logthrdestdrv.h"
+
 
 typedef struct
 {
-  LogThrDestDriver super;
-
+  LogThreadedDestDriver super;
   gchar *filename;
 } DummyDriver;
 
@@ -104,8 +104,8 @@ dummy_dd_set_filename(LogDriver *d, const gchar *filename)
  * Utilities
  */
 
-static gchar *
-dummy_dd_format_stats_instance(LogThrDestDriver *d)
+static const gchar *
+dummy_dd_format_stats_instance(LogThreadedDestDriver *d)
 {
   DummyDriver *self = (DummyDriver *)d;
   static gchar persist_name[1024];
@@ -115,14 +115,17 @@ dummy_dd_format_stats_instance(LogThrDestDriver *d)
   return persist_name;
 }
 
-static gchar *
-dummy_dd_format_persist_name(LogThrDestDriver *d)
+static const gchar *
+dummy_dd_format_persist_name(const LogPipe *d)
 {
   DummyDriver *self = (DummyDriver *)d;
   static gchar persist_name[1024];
 
-  g_snprintf(persist_name, sizeof(persist_name),
-             "dummy(%s)", self->filename);
+  if (d->persist_name)
+    g_snprintf(persist_name, sizeof(persist_name), "dummy.%s", d->persist_name);
+  else
+    g_snprintf(persist_name, sizeof(persist_name), "dummy.%s", self->filename);
+
   return persist_name;
 }
 
@@ -136,7 +139,7 @@ dummy_dd_connect(DummyDriver *self, gboolean reconnect)
 }
 
 static void
-dummy_dd_disconnect(LogThrDestDriver *d)
+dummy_dd_disconnect(LogThreadedDestDriver *d)
 {
   DummyDriver *self = (DummyDriver *)d;
 
@@ -148,8 +151,8 @@ dummy_dd_disconnect(LogThrDestDriver *d)
  * Worker thread
  */
 
-static worker_insert_result_t
-dummy_worker_insert(LogThrDestDriver *d, LogMessage *msg)
+static LogThreadedResult
+dummy_worker_insert(LogThreadedDestDriver *d, LogMessage *msg)
 {
   DummyDriver *self = (DummyDriver *)d;
 
@@ -158,18 +161,19 @@ dummy_worker_insert(LogThrDestDriver *d, LogMessage *msg)
             evt_tag_str("filename", self->filename),
             NULL);
 
-  return WORKER_INSERT_RESULT_SUCCESS;
+  return LTR_SUCCESS;
   /*
-   * WORKER_INSERT_RESULT_SUCCESS
-   * WORKER_INSERT_RESULT_ERROR
-   * WORKER_INSERT_RESULT_DROP
-   * WORKER_INSERT_RESULT_NOT_CONNECTED
-   * WORKER_INSERT_RESULT_REWIND
+   * LTR_DROP,
+   * LTR_ERROR,
+   * LTR_SUCCESS,
+   * LTR_QUEUED,
+   * LTR_NOT_CONNECTED,
+   * LTR_RETRY,
   */
 }
 
 static void
-dummy_worker_thread_init(LogThrDestDriver *d)
+dummy_worker_thread_init(LogThreadedDestDriver *d)
 {
   DummyDriver *self = (DummyDriver *)d;
 
@@ -181,7 +185,7 @@ dummy_worker_thread_init(LogThrDestDriver *d)
 }
 
 static void
-dummy_worker_thread_deinit(LogThrDestDriver *d)
+dummy_worker_thread_deinit(LogThreadedDestDriver *d)
 {
   DummyDriver *self = (DummyDriver *)d;
 
@@ -200,7 +204,7 @@ dummy_dd_init(LogPipe *d)
   DummyDriver *self = (DummyDriver *)d;
   GlobalConfig *cfg = log_pipe_get_config(d);
 
-  if (!log_dest_driver_init_method(d))
+  if (!log_threaded_dest_driver_init_method(d))
     return FALSE;
 
   msg_verbose("Initializing Dummy destination",
@@ -208,7 +212,7 @@ dummy_dd_init(LogPipe *d)
               evt_tag_str("filename", self->filename),
               NULL);
 
-  return log_threaded_dest_driver_start(d);
+  return log_threaded_dest_driver_start_workers(&self->super);
 }
 
 static void
@@ -239,8 +243,8 @@ dummy_dd_new(GlobalConfig *cfg)
   self->super.worker.disconnect = dummy_dd_disconnect;
   self->super.worker.insert = dummy_worker_insert;
 
-  self->super.format.stats_instance = dummy_dd_format_stats_instance;
-  self->super.format.persist_name = dummy_dd_format_persist_name;
+  self->super.format_stats_instance = dummy_dd_format_stats_instance;
+  self->super.super.super.super.generate_persist_name = dummy_dd_format_persist_name;
   //self->super.stats_source = SCS_DUMMY;
 
   return (LogDriver *)self;
@@ -256,9 +260,9 @@ static Plugin dummy_plugin =
 };
 
 gboolean
-dummy_module_init(GlobalConfig *cfg, CfgArgs *args)
+dummy_module_init(PluginContext *context, CfgArgs *args)
 {
-  plugin_register(cfg, &dummy_plugin, 1);
+  plugin_register(context, &dummy_plugin, 1);
 
   return TRUE;
 }
@@ -282,7 +286,7 @@ This unit can be separated into 5 parts:
 4. functions running in the main thread
 5. plugin-construction declarations
 
-Functions from category 2-4 are implementations of the LogThrDestDriver's virtual methods.
+Functions from category 2-4 are implementations of the LogThreadedDestDriver's virtual methods.
 In `dummy_dd_new`, we pass these function pointers to the base classes.
 
 Our example overrides these 6 virtual methods:
@@ -328,6 +332,7 @@ int dummy_parse(CfgLexer *lexer, LogDriver **instance, gpointer arg);
 
 static CfgLexerKeyword dummy_keywords[] = {
   { "dummy", KW_DUMMY },
+  { "filename", KW_FILENAME },
   { NULL }
 };
 
@@ -373,6 +378,7 @@ The dummy-grammar.ym file writes down the syntax of the configuration of our des
 /* INCLUDE_DECLS */
 
 %token KW_DUMMY
+%token KW_FILENAME
 
 %%
 
@@ -384,13 +390,17 @@ start
           '(' dummy_option ')' { YYACCEPT; }
 ;
 
+dummy_options
+        : dummy_option dummy_options
+        |
+        ;
+
 dummy_option
-        : string
+        : KW_FILENAME '(' string ')'
           {
-            dummy_dd_set_filename(last_driver, $1);
-            free($1);
+            dummy_dd_set_filename(last_driver, $3);
+            free($3);
           }
-        | dest_driver_option
         | threaded_dest_driver_option
 ;
 
