@@ -13,7 +13,7 @@ source s_local {
 };
 
 destination d_dummy {
-    dummy("/tmp/test");
+    dummy(filename("/tmp/test"));
 };
 
 log {
@@ -79,6 +79,7 @@ This is the implementation of the destination driver. It will be built as a shar
 #include "driver.h"
 #include "plugin-types.h"
 #include "logthrdest/logthrdestdrv.h"
+
 
 typedef struct
 {
@@ -331,6 +332,7 @@ int dummy_parse(CfgLexer *lexer, LogDriver **instance, gpointer arg);
 
 static CfgLexerKeyword dummy_keywords[] = {
   { "dummy", KW_DUMMY },
+  { "filename", KW_FILENAME },
   { NULL }
 };
 
@@ -376,6 +378,7 @@ The dummy-grammar.ym file writes down the syntax of the configuration of our des
 /* INCLUDE_DECLS */
 
 %token KW_DUMMY
+%token KW_FILENAME
 
 %%
 
@@ -387,13 +390,17 @@ start
           '(' dummy_option ')' { YYACCEPT; }
 ;
 
+dummy_options
+        : dummy_option dummy_options
+        |
+        ;
+
 dummy_option
-        : string
+        : KW_FILENAME '(' string ')'
           {
-            dummy_dd_set_filename(last_driver, $1);
-            free($1);
+            dummy_dd_set_filename(last_driver, $3);
+            free($3);
           }
-        | dest_driver_option
         | threaded_dest_driver_option
 ;
 
