@@ -1,75 +1,137 @@
 # Simple Threaded C Destination
 
-In order to implement a threaded C destination, you need to create a syslog-ng module and a plugin in it.
-At the end of this section you're going to be ready to start syslog-ng with the following configuration:
+In this guide, we will implement a threaded destination driver in C, called `example-destination`.
 
+It will have one optional parameter: `filename`, with `"output.txt"` as default value.
+
+Config example:
 ```C
-@version: 3.8
-@include "scl.conf"
+@version: 3.28
 
 source s_local {
     system();
     internal();
 };
 
-destination d_dummy {
-    dummy(filename("/tmp/test"));
-};
-
 log {
-    source(s_local);
-    destination(d_dummy);
+
+  source(s_local);
+  destination { example-destination(filename("output.txt")); };
 };
 ```
 
-### Creating a module
-Make a new folder in syslog-ng's modules directory, for example: `dummy`, and create a file structure that is similar to the following.
+`example-destination` will write data to `filename`. The data will contain the thread id of the thread that writes to the file, and the original message, in the following format:
+
 ```
-modules/dummy
-├── dummy-grammar.ym
-├── dummy-parser.c
-├── dummy-parser.h
-├── dummy.c
-├── dummy.h
+thread_id=140495535482624 message=-- Generated message. --
+```
+
+In order to implement a threaded C destination, you need to create a syslog-ng module and a plugin in it.
+
+You can find `example-destination` in the [repository](https://github.com/syslog-ng/syslog-ng/tree/master/modules/examples/destinations/example_destination). There are a few differences to the shipped version, compared to the code that we walk through here:
+- The shipped module is not under `modules/example_destination`, but under `modules/examples/destinations/example_destinations`, together with the other examples.
+- It is not a module on it's own, but it is part of a larger `libexamples` module.
+- It is built as static into `libexamples`. The destination in this guide is put into it's own dynamic library.
+- The `ModuleInfo` of the shipped version is set in a different location: in the plugin list of `libexamples`.
+
+**WARNING**: If you try and follow this guide, there will be a collision with the shipped version of `example-destination` and your version. To avoid that, you either need to choose another name, or disable the shipped `example-destination` module.
+
+To disable the shipped version, the simplest solution is to remove the entire examples module from the build system.
+- autotools
+
+Remove `include modules/examples/Makefile.am` from `modules/Makefile.am`.
+
+- cmake
+
+Remove `add_subdirectory(examples)`
+
+### Creating a module skeleton
+
+You can use a development script that prepares a skeleton code for the destination:
+```
+$ dev-utils/plugin_skeleton_creator/create_plugin.sh -n example_destination -k example_destination -t LL_CONTEXT_DESTINATION
+```
+
+The command above will create the following files.
+```
+modules/example_destination
+├── CMakeLists.txt
+├── example_destination-grammar.ym
+├── example_destination-parser.c
+├── example_destination-parser.h
+├── example_destination-plugin.c
 └── Makefile.am
 ```
 
-- The `dummy-grammar` and `dummy-parser` files will contain the configuration grammar. Parser codes are generated from these.
-- `dummy` will implement the destination logic through interfaces.
+The next step is make the build system notice the new module. Syslog-ng maintains two build systems in parallel: autotools and cmake.
 
-When you are writing a destination, you should extend from one of these abstract classes: `LogThreadedDestDriver`, `LogDestDriver`.
+- autotools
 
-This example shows an empty and very simple LogThreadedDestDriver (threaded destination driver) implementation.
-In this case, we have a dedicated thread so it's allowed to use blocking operations.
+Add `include modules/example_destination/Makefile.am` for `modules/Makefile.am`, and add `mod-example_destination` to the `SYSLOG_NG_MODULES` variable.
 
-### Dummy Destination
+- cmake
 
-#### dummy.h
+Add `add_subdirectory(example_destination)` for `modules/CMakeLists.txt`.
+
+The `example_destination-grammar` and `example_destination-parser` files will contain the configuration grammar. Parser codes are generated from these.
+
+### Example Destination
+
+A threaded destination consists of a driver, and one or more workers. In this example, we will have only one worker. If you need more workers, all you need to do is to call `log_threaded_dest_driver_set_num_workers` similarly to other modules in the source code. Threaded destination driver has one worker by default.
+
+When you are writing a destination, you should extend these abstract classes: `LogThreadedDestDriver`, `LogThreadedDestWorker`.
+
+Workers use dedicated thread instead of the main thread (hence the name: threaded destination). So it's allowed to use blocking operations.
+
+Create these new files:
+- `example_destination.h`
+- `example_destination.c`
+- `example_destination_worker.h`
+- `example_destination_worker.c`
+
+These files needed to be added to the build system too.
+
+- autotools
+
+Add these files to `modules_example_destination_libexample_destination_la_SOURCES` in `modules/example_destination/Makefile.am`
+
+- cmake
+
+Add these files to `example_destination_SOURCES` in `modules/example_destination/CMakeLists.txt`.
+
+#### example_destination.h
 The destination header file only contains the initialization functions needed by the config parser.
-- `dummy_dd_new`: constructs our destination
-- `dummy_dd_set_*`: option setter functions for the parser
-
-This example has only one dummy filename option.
+- `example_destination_dd_new`: constructs the destination
+- `example_destination_dd_set_*`: option setter functions for the parser
 
 ```C
-#ifndef DUMMY_H_INCLUDED
-#define DUMMY_H_INCLUDED
+#ifndef EXAMPLE_DESTINATION_H_INCLUDED
+#define EXAMPLE_DESTINATION_H_INCLUDED
 
 #include "driver.h"
+#include "logthrdest/logthrdestdrv.h"
 
-LogDriver *dummy_dd_new(GlobalConfig *cfg);
+typedef struct
+{
+  LogThreadedDestDriver super;
+  GString *filename;
+} ExampleDestinationDriver;
 
-void dummy_dd_set_filename(LogDriver *d, const gchar *filename);
+LogDriver *example_destination_dd_new(GlobalConfig *cfg);
+
+void example_destination_dd_set_filename(LogDriver *d, const gchar *filename);
 
 #endif
 ```
 
-#### dummy.c
+#### example_destination.c
 
-This is the implementation of the destination driver. It will be built as a shared or static library.
+This is the implementation of the destination driver. It will be built as a shared library.
+
 ```C
-#include "dummy.h"
-#include "dummy-parser.h"
+#include "example_destination.h"
+#include "example_destination_worker.h"
+#include "example_destination-parser.h"
 
 #include "plugin.h"
 #include "messages.h"
@@ -81,23 +143,16 @@ This is the implementation of the destination driver. It will be built as a shar
 #include "logthrdest/logthrdestdrv.h"
 
 
-typedef struct
-{
-  LogThreadedDestDriver super;
-  gchar *filename;
-} DummyDriver;
-
 /*
  * Configuration
  */
 
 void
-dummy_dd_set_filename(LogDriver *d, const gchar *filename)
+example_destination_dd_set_filename(LogDriver *d, const gchar *filename)
 {
-  DummyDriver *self = (DummyDriver *)d;
+  ExampleDestinationDriver *self = (ExampleDestinationDriver *)d;
 
-  g_free(self->filename);
-  self->filename = g_strdup(filename);
+  g_string_assign(self->filename, filename);
 }
 
 /*
@@ -105,61 +160,152 @@ dummy_dd_set_filename(LogDriver *d, const gchar *filename)
  */
 
 static const gchar *
-dummy_dd_format_stats_instance(LogThreadedDestDriver *d)
+_format_stats_instance(LogThreadedDestDriver *d)
 {
-  DummyDriver *self = (DummyDriver *)d;
+  ExampleDestinationDriver *self = (ExampleDestinationDriver *)d;
   static gchar persist_name[1024];
 
   g_snprintf(persist_name, sizeof(persist_name),
-             "dummy,%s", self->filename);
+             "example-destination,%s", self->filename->str);
   return persist_name;
 }
 
 static const gchar *
-dummy_dd_format_persist_name(const LogPipe *d)
+_format_persist_name(const LogPipe *d)
 {
-  DummyDriver *self = (DummyDriver *)d;
+  ExampleDestinationDriver *self = (ExampleDestinationDriver *)d;
   static gchar persist_name[1024];
 
   if (d->persist_name)
-    g_snprintf(persist_name, sizeof(persist_name), "dummy.%s", d->persist_name);
+    g_snprintf(persist_name, sizeof(persist_name), "example-destination.%s", d->persist_name);
   else
-    g_snprintf(persist_name, sizeof(persist_name), "dummy.%s", self->filename);
+    g_snprintf(persist_name, sizeof(persist_name), "example-destination.%s", self->filename->str);
 
   return persist_name;
 }
 
 static gboolean
-dummy_dd_connect(DummyDriver *self, gboolean reconnect)
+_dd_init(LogPipe *d)
 {
-  msg_debug("Dummy connection succeeded",
-            evt_tag_str("driver", self->super.super.super.id), NULL);
+  ExampleDestinationDriver *self = (ExampleDestinationDriver *)d;
+
+  if (!log_threaded_dest_driver_init_method(d))
+    return FALSE;
+
+  if (!self->filename->len)
+    g_string_assign(self->filename, "/tmp/example-destination-output.txt");
 
   return TRUE;
 }
 
-static void
-dummy_dd_disconnect(LogThreadedDestDriver *d)
+gboolean
+_dd_deinit(LogPipe *s)
 {
-  DummyDriver *self = (DummyDriver *)d;
+  /*
+     If you created resources during init,
+     you need to destroy them here.
+  */
 
-  msg_debug("Dummy connection closed",
-            evt_tag_str("driver", self->super.super.super.id), NULL);
+  return log_threaded_dest_driver_deinit_method(s);
 }
 
-/*
- * Worker thread
- */
+static void
+_dd_free(LogPipe *d)
+{
+  ExampleDestinationDriver *self = (ExampleDestinationDriver *)d;
+
+  g_string_free(self->filename, TRUE);
+
+  log_threaded_dest_driver_free(d);
+}
+
+LogDriver *
+example_destination_dd_new(GlobalConfig *cfg)
+{
+  ExampleDestinationDriver *self = g_new0(ExampleDestinationDriver, 1);
+  self->filename = g_string_new("");
+
+  log_threaded_dest_driver_init_instance(&self->super, cfg);
+  self->super.super.super.super.init = _dd_init;
+  self->super.super.super.super.deinit = _dd_deinit;
+  self->super.super.super.super.free_fn = _dd_free;
+
+  self->super.format_stats_instance = _format_stats_instance;
+  self->super.super.super.super.generate_persist_name = _format_persist_name;
+  self->super.stats_source = stats_register_type("example-destination");
+  self->super.worker.construct = example_destination_dw_new;
+
+  return (LogDriver *)self;
+}
+```
+
+Our example overrides these virtual methods:
+
+- `new (example_destination_dd_new)`: driver constructor.
+- `free_fn (_dd_free)`: driver destructor.
+- `init (_dd_init)`: It is called after startup, and after each reload. You can set default values here. It is important to note that the init method may be called multiple times for the same driver. In case of a failed reload (for example syntax error in config), syslog-ng will resume using the same driver instances instead of creating new ones, after calling their init method again.
+- `deinit (_dd_deinit)`: It is called before shutdown, and before each reload. If you created resources during `init`, then you need to free them here.
+- `format_stats_instance (_format_stats_instance)`: this specifies how this driver is represented with `syslog-ng-ctl stats` or `syslog-ng-ctl query get "*"`.
+- `generate_persist_name (_generate_persist_name)`: this specifies the persist key of the driver in the persist file. This name is used when syslog-ng attaches a disk queue for a driver, for example.
+- `construct (example_destination_dw_new)`: constructor for the worker. It is implemented in `example_destination_worker.c`.
+
+#### example_destination_worker.h
+
+```C
+#ifndef EXAMPLE_DESTINATION_WORKER_H_INCLUDED
+#define EXAMPLE_DESTINATION_WORKER_H_INCLUDED 1
+
+#include "logthrdest/logthrdestdrv.h"
+#include "thread-utils.h"
+
+
+typedef struct _ExampleDestinationWorker
+{
+  LogThreadedDestWorker super;
+  FILE *file;
+  ThreadId thread_id;
+} ExampleDestinationWorker;
+
+LogThreadedDestWorker *example_destination_dw_new(LogThreadedDestDriver *o, gint worker_index);
+
+#endif
+```
+
+#### example_destination_worker.c
+
+This is the implementation of the worker.
+
+
+```C
+#include "example_destination_worker.h"
+#include "example_destination.h"
+#include "thread-utils.h"
+
+#include <stdio.h>
 
 static LogThreadedResult
-dummy_worker_insert(LogThreadedDestDriver *d, LogMessage *msg)
+_dw_insert(LogThreadedDestWorker *s, LogMessage *msg)
 {
-  DummyDriver *self = (DummyDriver *)d;
+  ExampleDestinationWorker *self = (ExampleDestinationWorker *)s;
 
-  msg_debug("Dummy message sent",
-            evt_tag_str("driver", self->super.super.super.id),
-            evt_tag_str("filename", self->filename),
-            NULL);
+  GString *string_to_write = g_string_new("");
+  g_string_printf(string_to_write, "thread_id=%lu message=%s\n",
+                  self->thread_id, log_msg_get_value(msg, LM_V_MESSAGE, NULL));
+
+  size_t retval = fwrite(string_to_write->str, 1, string_to_write->len, self->file);
+  if (retval != string_to_write->len)
+    {
+      msg_error("Error while reading file");
+      return LTR_NOT_CONNECTED;
+    }
+
+  if (fflush(self->file) != 0)
+    {
+      msg_error("Error while flushing file");
+      return LTR_NOT_CONNECTED;
+    }
+
+  g_string_free(string_to_write, TRUE);
 
   return LTR_SUCCESS;
   /*
@@ -172,204 +318,128 @@ dummy_worker_insert(LogThreadedDestDriver *d, LogMessage *msg)
   */
 }
 
-static void
-dummy_worker_thread_init(LogThreadedDestDriver *d)
-{
-  DummyDriver *self = (DummyDriver *)d;
-
-  msg_debug("Worker thread started",
-            evt_tag_str("driver", self->super.super.super.id),
-            NULL);
-
-  dummy_dd_connect(self, FALSE);
-}
-
-static void
-dummy_worker_thread_deinit(LogThreadedDestDriver *d)
-{
-  DummyDriver *self = (DummyDriver *)d;
-
-  msg_debug("Worker thread stopped",
-            evt_tag_str("driver", self->super.super.super.id),
-            NULL);
-}
-
-/*
- * Main thread
- */
-
 static gboolean
-dummy_dd_init(LogPipe *d)
+_connect(LogThreadedDestWorker *s)
 {
-  DummyDriver *self = (DummyDriver *)d;
-  GlobalConfig *cfg = log_pipe_get_config(d);
+  ExampleDestinationWorker *self = (ExampleDestinationWorker *)s;
+  ExampleDestinationDriver *owner = (ExampleDestinationDriver *) s->owner;
 
-  if (!log_threaded_dest_driver_init_method(d))
-    return FALSE;
-
-  msg_verbose("Initializing Dummy destination",
-              evt_tag_str("driver", self->super.super.super.id),
-              evt_tag_str("filename", self->filename),
-              NULL);
-
-  return log_threaded_dest_driver_start_workers(&self->super);
-}
-
-static void
-dummy_dd_free(LogPipe *d)
-{
-  DummyDriver *self = (DummyDriver *)d;
-
-  g_free(self->filename);
-
-  log_threaded_dest_driver_free(d);
-}
-
-/*
- * Plugin glue.
- */
-
-LogDriver *
-dummy_dd_new(GlobalConfig *cfg)
-{
-  DummyDriver *self = g_new0(DummyDriver, 1);
-
-  log_threaded_dest_driver_init_instance(&self->super, cfg);
-  self->super.super.super.super.init = dummy_dd_init;
-  self->super.super.super.super.free_fn = dummy_dd_free;
-
-  self->super.worker.thread_init = dummy_worker_thread_init;
-  self->super.worker.thread_deinit = dummy_worker_thread_deinit;
-  self->super.worker.disconnect = dummy_dd_disconnect;
-  self->super.worker.insert = dummy_worker_insert;
-
-  self->super.format_stats_instance = dummy_dd_format_stats_instance;
-  self->super.super.super.super.generate_persist_name = dummy_dd_format_persist_name;
-  //self->super.stats_source = SCS_DUMMY;
-
-  return (LogDriver *)self;
-}
-
-extern CfgParser dummy_parser;
-
-static Plugin dummy_plugin =
-{
-  .type = LL_CONTEXT_DESTINATION,
-  .name = "dummy",
-  .parser = &dummy_parser,
-};
-
-gboolean
-dummy_module_init(PluginContext *context, CfgArgs *args)
-{
-  plugin_register(context, &dummy_plugin, 1);
+  self->file = fopen(owner->filename->str, "a");
+  if (!self->file)
+    {
+      msg_error("Could not open file", evt_tag_error("error"));
+      return FALSE;
+    }
 
   return TRUE;
 }
 
-const ModuleInfo module_info =
+static void
+_disconnect(LogThreadedDestWorker *s)
 {
-  .canonical_name = "dummy",
-  .version = SYSLOG_NG_VERSION,
-  .description = "This is a dummy destination for syslog-ng.",
-  .core_revision = SYSLOG_NG_SOURCE_REVISION,
-  .plugins = &dummy_plugin,
-  .plugins_len = 1,
-};
+  ExampleDestinationWorker *self = (ExampleDestinationWorker *)s;
+
+  fclose(self->file);
+}
+
+static gboolean
+_thread_init(LogThreadedDestWorker *s)
+{
+  ExampleDestinationWorker *self = (ExampleDestinationWorker *)s;
+
+  /*
+    You can create thread specific resources here. In this example, we
+    store the thread id.
+  */
+  self->thread_id = get_thread_id();
+
+  return log_threaded_dest_worker_init_method(s);
+}
+
+static void
+_thread_deinit(LogThreadedDestWorker *s)
+{
+  /*
+    If you created resources during _thread_init,
+    you need to free them here
+  */
+
+  log_threaded_dest_worker_deinit_method(s);
+}
+
+static void
+_dw_free(LogThreadedDestWorker *s)
+{
+  /*
+    If you created resources during new,
+    you need to free them here.
+  */
+
+  log_threaded_dest_worker_free_method(s);
+}
+
+LogThreadedDestWorker *
+example_destination_dw_new(LogThreadedDestDriver *o, gint worker_index)
+{
+  ExampleDestinationWorker *self = g_new0(ExampleDestinationWorker, 1);
+
+  log_threaded_dest_worker_init_instance(&self->super, o, worker_index);
+  self->super.thread_init = _thread_init;
+  self->super.thread_deinit = _thread_deinit;
+  self->super.insert = _dw_insert;
+  self->super.free_fn = _dw_free;
+  self->super.connect = _connect;
+  self->super.disconnect = _disconnect;
+
+  return &self->super;
+}
 ```
 
-This unit can be separated into 5 parts:
+Our example overrides these virtual methods:
+- `thread_init (_thread_init)`: if you need to initialize thread specific resources, you can do them here. We are saving the thread id in this example. Non-thread specific resources may be created in the constructor (`example_destination_dw_new`).
+- `thread_deinit (_thread_deinit)`: if you created resources during `thread_init`, you need to deallocate them here.
+- `free_fn (_dw_free)` destructor for resources created in `example_destination_dw_new`.
+- `insert (_dw_insert)`: It formats the received message and sends to an actual destination.
+- `connect (_dw_connect)`: This is called after `thread_init`, before the first `insert`, and each time you signal error during insert (returning `LTR_ERROR`, `LTR_DROP` or `LTR_NOT_CONNECTED`). You can open files or establish connections here.
+- `disconnect (_dw_disconnect)`: This is called before deinit, or when you signal broken connection from insert. You can close files or sockets here.
 
-1. configuration functions (setters)
-2. utility functions
-3. functions running in separate thread
-4. functions running in the main thread
-5. plugin-construction declarations
+### grammar keywords
 
-Functions from category 2-4 are implementations of the LogThreadedDestDriver's virtual methods.
-In `dummy_dd_new`, we pass these function pointers to the base classes.
+`example_destination-parser.c` contains a list of available keywords that can be referred in the grammar. A keyword is an integer with a string representation. The integer is defined in `example_destination-grammar.ym`: see the example below. The string representation is defined in `example_destination-grammar.c`.
 
-Our example overrides these 6 virtual methods:
+The example destination module will support two keywords: `example_destination` and `filename`. You need to replace `example_destination-keywords` in `example_destination-parser.c` with:
 
-- `init (dummy_dd_init)`: destination constructor
-- `free_fn (dummy_dd_free)`: destination destructor
-- `thread_init (dummy_worker_thread_init)`: worker thread initialization
-- `thread_deinit (dummy_worker_thread_deinit)`: worker thread deinitialization
-- `disconnect (dummy_dd_disconnect)`: destination disconnects (on error or drop)
-
-The most important method is the `insert (dummy_worker_insert)`, where you can format the received message and send to an actual destination.
-
-### dummy-parser
-
-In this unit, we declare the keywords used in the syslog-ng.conf file and call the lexical analyzer.
-
-#### dummy-parser.h
-
-```C
-#ifndef DUMMY_PARSER_H_INCLUDED
-#define DUMMY_PARSER_H_INCLUDED
-
-#include "cfg-parser.h"
-#include "cfg-lexer.h"
-#include "dummy.h"
-
-extern CfgParser dummy_parser;
-
-CFG_PARSER_DECLARE_LEXER_BINDING(dummy_, LogDriver **)
-
-#endif
 ```
-
-#### dummy-parser.c
-
-```C
-#include "dummy.h"
-#include "cfg-parser.h"
-#include "dummy-grammar.h" // generated by lexer
-
-extern int dummy_debug;
-int dummy_parse(CfgLexer *lexer, LogDriver **instance, gpointer arg);
-
-static CfgLexerKeyword dummy_keywords[] = {
-  { "dummy", KW_DUMMY },
+static CfgLexerKeyword example_destination_keywords[] =
+{
+  { "example_destination", KW_EXAMPLE_DESTINATION },
   { "filename", KW_FILENAME },
   { NULL }
 };
-
-CfgParser dummy_parser =
-{
-#if SYSLOG_NG_ENABLE_DEBUG
-  .debug_flag = &dummy_debug,
-#endif
-  .name = "dummy",
-  .keywords = dummy_keywords,
-  .parse = (int (*)(CfgLexer *lexer, gpointer *instance, gpointer)) dummy_parse,
-  .cleanup = (void (*)(gpointer)) log_pipe_unref,
-};
-
-CFG_PARSER_IMPLEMENT_LEXER_BINDING(dummy_, LogDriver **)
 ```
 
-### dummy-grammar
+### grammar rules
 
-The dummy-grammar.ym file writes down the syntax of the configuration of our destination. It's written in yacc format. The bison parser generator creates parser code from this grammar.
+The example_destination-grammar.ym file writes down the syntax of the configuration of our destination. It's written in yacc format. The bison parser generator creates parser code from this grammar.
 
-#### dummy-grammar.ym
+#### example_destination-grammar.ym
 
 ```C
 %code requires {
 
-#include "dummy-parser.h"
+#include "example_destination-parser.h"
 
 }
 
 %code {
 
+#include "example_destination.h"
+
 #include "cfg-grammar.h"
 #include "plugin.h"
 }
 
-%name-prefix "dummy_"
+%name-prefix "example_destination_"
 %lex-param {CfgLexer *lexer}
 %parse-param {CfgLexer *lexer}
 %parse-param {LogDriver **instance}
@@ -377,28 +447,28 @@ The dummy-grammar.ym file writes down the syntax of the configuration of our des
 
 /* INCLUDE_DECLS */
 
-%token KW_DUMMY
+%token KW_EXAMPLE_DESTINATION
 %token KW_FILENAME
 
 %%
 
 start
-        : LL_CONTEXT_DESTINATION KW_DUMMY
+        : LL_CONTEXT_DESTINATION KW_EXAMPLE_DESTINATION
           {
-            last_driver = *instance = dummy_dd_new(configuration);
+            last_driver = *instance = example_destination_dd_new(configuration);
           }
-          '(' dummy_option ')' { YYACCEPT; }
+          '(' example_destination_options ')' { YYACCEPT; }
 ;
 
-dummy_options
-        : dummy_option dummy_options
+example_destination_options
+        : example_destination_option example_destination_options
         |
         ;
 
-dummy_option
+example_destination_option
         : KW_FILENAME '(' string ')'
           {
-            dummy_dd_set_filename(last_driver, $3);
+            example_destination_dd_set_filename(last_driver, $3);
             free($3);
           }
         | threaded_dest_driver_option
@@ -407,64 +477,4 @@ dummy_option
 /* INCLUDE_RULES */
 
 %%
-
-```
-### Makefile
-
-You should create a `Makefile.am` automake file to build the destination module.
-
-```Makefile
-module_LTLIBRARIES          +=          \
-    modules/dummy/libdummy.la
-
-modules_dummy_libdummy_la_CFLAGS    =   \
-    -I$(top_srcdir)/modules/dummy       \
-    -I$(top_builddir)/modules/dummy
-modules_dummy_libdummy_la_SOURCES   =   \
-    modules/dummy/dummy-grammar.y       \
-    modules/dummy/dummy.c               \
-    modules/dummy/dummy.h               \
-    modules/dummy/dummy-parser.c        \
-    modules/dummy/dummy-parser.h
-modules_dummy_libdummy_la_LIBADD    =   \
-    $(MODULE_DEPS_LIBS)
-modules_dummy_libdummy_la_LDFLAGS   =   \
-    $(MODULE_LDFLAGS)
-modules_dummy_libdummy_la_DEPENDENCIES  =   \
-    $(MODULE_DEPS_LIBS)
-
-modules/dummy modules/dummy/ mod-dummy: \
-    modules/dummy/libdummy.la
-
-BUILT_SOURCES               +=          \
-    modules/dummy/dummy-grammar.y       \
-    modules/dummy/dummy-grammar.c       \
-    modules/dummy/dummy-grammar.h
-EXTRA_DIST                  +=          \
-    modules/dummy/dummy-grammar.ym
-
-.PHONY: modules/dummy/ mod-dummy
-```
-
-Finally, include the dummy module's Makefile into `modules/Makefile.am` and add the module's name to the SYSLOG_NG_MODULES variable.
-
-```Makefile
-...
-
-include modules/native/Makefile.am
-include modules/dummy/Makefile.am
-
-SYSLOG_NG_MODULES = \
-  mod-afsocket mod-afstreams mod-affile mod-afprog \
-  mod-usertty mod-amqp mod-mongodb mod-smtp mod-json \
-  mod-syslogformat mod-linux-kmsg mod-pacctformat \
-  mod-confgen mod-system-source mod-csvparser mod-dbparser \
-  mod-basicfuncs mod-cryptofuncs mod-geoip mod-afstomp \
-  mod-redis mod-pseudofile mod-graphite mod-riemann \
-  mod-python mod-java mod-java-modules mod-kvformat mod-date \
-  mod-native mod-dummy
-
-modules modules/: ${SYSLOG_NG_MODULES}
-
-...
 ```
