@@ -14,7 +14,7 @@ Feel free to contribute and propose your chapter ideas.
 
 ### GitBook
 
-available here: [syslog-ng-gitbook](https://www.gitbook.com/book/syslog-ng/getting-started/details)
+available here: [syslog-ng-gitbook](https://syslog-ng.gitbooks.io/getting-started/content/)
 
 ### The syslog-ng project
 
