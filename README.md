@@ -12,22 +12,19 @@ We hope that you will find our GitBook useful and will be ready
 to create your own ideas.  
 Feel free to contribute and propose your chapter ideas.
 
+### The syslog-ng project
+
+[![Build Status](https://github.com/syslog-ng/syslog-ng/actions/workflows/devshell.yml/badge.svg)](https://ci.syslog-ng.com/view/OSE-DAILY-MONITOR/)
+
+available here: [syslog-ng](https://github.com/balabit/syslog-ng)
+
 ### GitBook
 
 available here: [syslog-ng-gitbook](https://syslog-ng.gitbooks.io/getting-started/content/)
 
-### The syslog-ng project
+### Issue tracker
 
-[![Build Status](https://travis-ci.org/balabit/syslog-ng.svg?branch=master)](https://travis-ci.org/balabit/syslog-ng)  
-[![Build Status](https://drone.io/github.com/balabit/syslog-ng/status.png)](https://drone.io/github.com/balabit/syslog-ng/latest)
-
-available here: [syslog-ng](https://github.com/balabit/syslog-ng)
-
-### Waffle.io
-
-[![Stories in Ready](https://badge.waffle.io/balabit/syslog-ng-gitbook.svg?label=ready&title=Ready)](http://waffle.io/balabit/syslog-ng-gitbook)
-
-We use waffle.io to track the issues.
+We use github to [track the issues](https://github.com/balabit/syslog-ng-gitbook/issues).
 
 ### TravisCI
 
