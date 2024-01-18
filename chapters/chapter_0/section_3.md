@@ -1,7 +1,7 @@
 # macOS
 
-[ref:install]: /chapters/chapter_4/section_2
-[ref:compile]: /chapters/chapter_4/section_2
+[ref:install]: /chapters/chapter_3/section_4
+[ref:compile]: /chapters/chapter_3/section_4
 [ref:freepascal-launchd]: https://wiki.freepascal.org/macOS_daemons_and_agents
 [ref:apple-launchd]: https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html
 [ref:homebrew]: http://brew.sh
