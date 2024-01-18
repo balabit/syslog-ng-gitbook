@@ -17,6 +17,8 @@
     * [write your first config](chapters/chapter_3/section_1.md)
     * [syslog-ng](chapters/chapter_3/section_2.md)
     * [debugging syslog-ng](chapters/chapter_3/section_3.md)
+* [platform specific builds](chapters/chapter_3)
+    * [macOS building](chapters/chapter_3/section_3.md)
 * [contribute](chapters/chapter_4/README.md)
     * [tools](chapters/chapter_4/section_1.md)
     * [issues](chapters/chapter_4/section_2.md)
