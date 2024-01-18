@@ -34,11 +34,11 @@ for compiling and running properly. These dependencies can be satisfied by compi
 
 1. [Install Homebrew][ref:homebrew-install] on your system.
 
-   > Tip
-   Don't forget to set up the homebrew environment, follow the instructions in your terminal! [Here][ref:homebrew-install-detailed] you can find an even more detailed instruction about the topic.
+   > Tip:
+   > Don't forget to set up the homebrew environment, follow the instructions in your terminal! [Here][ref:homebrew-install-detailed] you can find an even more detailed instruction about the topic.
 
-   > Note
-   This will install **Command Line Tools for Xcode** as well if not already presented on the system that would also be required anyway for a seamless syslog-ng build.
+   > Note:
+   > This will install **Command Line Tools for Xcode** as well if not already presented on the system that would also be required anyway for a seamless syslog-ng build.
 2. Perform `brew update` if you have not done it yet.
 3. The following packages should be installed for syslog-ng:
     * autoconf
@@ -158,8 +158,9 @@ brew install \
    export LDFLAGS="-L${HOMEBREW_PREFIX}/lib ${LDFLAGS}"
    ```
   
-   > Note
-   It could also happen that you must provide here further library inlcude and lib paths, e.g. for openssl 1.1.x, etc.
+   > Note:
+   > 
+   >It could also happen that you must provide here further library inlcude and lib paths, e.g. for openssl 1.1.x, etc.
 
 5. If you wanted to use `gcc` then to force usage of the brew installed version you might want to add
 
@@ -180,8 +181,9 @@ brew install \
    gcc (Homebrew GCC 11.4.0) 11.4.0
    ```
 
-   > Note
-   The result of the default (clang) one that comes from the output of `/usr/bion/gcc` (which you have by default, and is a simple symlink that points to clang)
+   > Note:
+   > 
+   >The result of the default (clang) one that comes from the output of `/usr/bion/gcc` (which you have by default, and is a simple symlink that points to clang)
 
    ```shell
    Apple clang version 15.0.0 (clang-1500.1.0.2.5)
@@ -205,8 +207,8 @@ export CC=gcc
 export CXX=g++
 ```
 
-> [!NOTE]
-Some parts will still be compiled with clang at the moment as gcc cannot compile e.g. the latest ObjectivC sources syslog-ng uses
+> Note:
+> Some parts will still be compiled with clang at the moment as gcc cannot compile e.g. the latest ObjectivC sources syslog-ng uses
 
 For clang (optional, macOS default)
 
@@ -230,7 +232,7 @@ mkdir build; cd build
 ../configure --with-ivykis=system --with-systemd-journal=no --disable-java --disable-java-modules
 ```
 
-{> [!WARNING]
+> [!WARNING]
 By a good chance, you might want to install the self built instance first to a custom location to prevent overwriting a possibly already existing brew installation version. In that case pass `--prefix /full_path_of/installdir/` to the `configure` script in the above steps.
 
 For a full feature set you can add further `configure`` flags (excluded the not yet supported modules on macOS), for example
