@@ -25,7 +25,6 @@ First, check [this][ref:install] if you have not got Homebrew installed and pre-
 [Homebrew][ref:homebrew] has now different home directories on ARM and X86 systems, also the location could depend on your macOS version.
 We will reference to its home directory as `${HOMEBREW_PREFIX}` in this document, as if you follow the installation instructions above it will be set already correctly independenty of your system.
 
-{: .notice--info}  
 **Hint**: you can use `export HOMEBREW_PREFIX=$(brew --prefix)` in your scripts or shell environments to get and reference the actual location of your homewbrew installation
 
 ## Checking dependencies
