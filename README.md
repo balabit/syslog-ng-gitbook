@@ -52,6 +52,3 @@ You can find a `Vagrantfile` in the repository that you can use to install a dev
   to the proper branch you made your modifications to.
 * Please test your modifications using the `Vagrantfile` provided. Later TravisCI will also run
   some tests on the repository to avoid problems.
-
-
-
