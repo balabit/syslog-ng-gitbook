@@ -1,4 +1,4 @@
-# Getting started to...
+# [Getting started to...](README.md)
 
 * [install syslog-ng on different platforms](chapters/chapter_0/README.md)
     * [Ubuntu](chapters/chapter_0/section_1.md)
