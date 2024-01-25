@@ -20,7 +20,7 @@ available here: [syslog-ng](https://github.com/balabit/syslog-ng)
 
 ### GitBook
 
-available here: [syslog-ng-gitbook](https://syslog-ng.gitbooks.io/getting-started/content/)
+available here: [syslog-ng-gitbook](https://syslog-ng.gitbook.io/getting-started/content/)
 
 ### Issue tracker
 
